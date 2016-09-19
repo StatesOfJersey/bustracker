@@ -1,0 +1,63 @@
+C:\Users\sbryans\Documents\JerseyBuses\Branches\V2-ORD-03170\GitHub code\BusWebsite\bin\ApplicationInsights.config
+C:\Users\sbryans\Documents\JerseyBuses\Branches\V2-ORD-03170\GitHub code\BusWebsite\bin\Bus.dll.config
+C:\Users\sbryans\Documents\JerseyBuses\Branches\V2-ORD-03170\GitHub code\BusWebsite\bin\Bus.dll
+C:\Users\sbryans\Documents\JerseyBuses\Branches\V2-ORD-03170\GitHub code\BusWebsite\bin\Bus.pdb
+C:\Users\sbryans\Documents\JerseyBuses\Branches\V2-ORD-03170\GitHub code\BusWebsite\bin\Microsoft.AI.Agent.Intercept.dll
+C:\Users\sbryans\Documents\JerseyBuses\Branches\V2-ORD-03170\GitHub code\BusWebsite\bin\Microsoft.AI.DependencyCollector.dll
+C:\Users\sbryans\Documents\JerseyBuses\Branches\V2-ORD-03170\GitHub code\BusWebsite\bin\Microsoft.AI.PerfCounterCollector.dll
+C:\Users\sbryans\Documents\JerseyBuses\Branches\V2-ORD-03170\GitHub code\BusWebsite\bin\Microsoft.AI.ServerTelemetryChannel.dll
+C:\Users\sbryans\Documents\JerseyBuses\Branches\V2-ORD-03170\GitHub code\BusWebsite\bin\Microsoft.AI.Web.dll
+C:\Users\sbryans\Documents\JerseyBuses\Branches\V2-ORD-03170\GitHub code\BusWebsite\bin\Microsoft.AI.WindowsServer.dll
+C:\Users\sbryans\Documents\JerseyBuses\Branches\V2-ORD-03170\GitHub code\BusWebsite\bin\Microsoft.ApplicationInsights.dll
+C:\Users\sbryans\Documents\JerseyBuses\Branches\V2-ORD-03170\GitHub code\BusWebsite\bin\Microsoft.Web.Infrastructure.dll
+C:\Users\sbryans\Documents\JerseyBuses\Branches\V2-ORD-03170\GitHub code\BusWebsite\bin\System.Web.Helpers.dll
+C:\Users\sbryans\Documents\JerseyBuses\Branches\V2-ORD-03170\GitHub code\BusWebsite\bin\System.Web.Mvc.dll
+C:\Users\sbryans\Documents\JerseyBuses\Branches\V2-ORD-03170\GitHub code\BusWebsite\bin\System.Web.Razor.dll
+C:\Users\sbryans\Documents\JerseyBuses\Branches\V2-ORD-03170\GitHub code\BusWebsite\bin\System.Web.Webpages.Deployment.dll
+C:\Users\sbryans\Documents\JerseyBuses\Branches\V2-ORD-03170\GitHub code\BusWebsite\bin\System.Web.Webpages.dll
+C:\Users\sbryans\Documents\JerseyBuses\Branches\V2-ORD-03170\GitHub code\BusWebsite\bin\System.Web.Webpages.Razor.dll
+C:\Users\sbryans\Documents\JerseyBuses\Branches\V2-ORD-03170\GitHub code\BusWebsite\bin\Microsoft.AI.DependencyCollector.xml
+C:\Users\sbryans\Documents\JerseyBuses\Branches\V2-ORD-03170\GitHub code\BusWebsite\bin\Microsoft.AI.ServerTelemetryChannel.xml
+C:\Users\sbryans\Documents\JerseyBuses\Branches\V2-ORD-03170\GitHub code\BusWebsite\bin\Microsoft.AI.Web.xml
+C:\Users\sbryans\Documents\JerseyBuses\Branches\V2-ORD-03170\GitHub code\BusWebsite\bin\Microsoft.AI.WindowsServer.xml
+C:\Users\sbryans\Documents\JerseyBuses\Branches\V2-ORD-03170\GitHub code\BusWebsite\bin\Microsoft.ApplicationInsights.xml
+C:\Users\sbryans\Documents\JerseyBuses\Branches\V2-ORD-03170\GitHub code\BusWebsite\bin\System.Web.Razor.xml
+C:\Users\sbryans\Documents\JerseyBuses\Branches\V2-ORD-03170\GitHub code\BusWebsite\bin\System.Web.Webpages.xml
+C:\Users\sbryans\Documents\JerseyBuses\Branches\V2-ORD-03170\GitHub code\BusWebsite\bin\System.Web.Webpages.Deployment.xml
+C:\Users\sbryans\Documents\JerseyBuses\Branches\V2-ORD-03170\GitHub code\BusWebsite\bin\System.Web.Webpages.Razor.xml
+C:\Users\sbryans\Documents\JerseyBuses\Branches\V2-ORD-03170\GitHub code\BusWebsite\bin\System.Web.Helpers.xml
+C:\Users\sbryans\Documents\JerseyBuses\Branches\V2-ORD-03170\GitHub code\BusWebsite\bin\System.Web.Mvc.xml
+C:\Users\sbryans\Documents\JerseyBuses\Branches\V2-ORD-03170\GitHub code\BusWebsite\obj\Debug\BusWebsite.csprojResolveAssemblyReference.cache
+C:\Users\sbryans\Documents\JerseyBuses\Branches\V2-ORD-03170\GitHub code\BusWebsite\obj\Debug\Bus.dll
+C:\Users\sbryans\Documents\JerseyBuses\Branches\V2-ORD-03170\GitHub code\BusWebsite\obj\Debug\Bus.pdb
+C:\Users\sbryans\Documents\JerseyBuses\Branches\V2-ORD-03170\GitHub\BusWebsite\bin\ApplicationInsights.config
+C:\Users\sbryans\Documents\JerseyBuses\Branches\V2-ORD-03170\GitHub\BusWebsite\bin\Bus.dll.config
+C:\Users\sbryans\Documents\JerseyBuses\Branches\V2-ORD-03170\GitHub\BusWebsite\bin\Bus.dll
+C:\Users\sbryans\Documents\JerseyBuses\Branches\V2-ORD-03170\GitHub\BusWebsite\bin\Bus.pdb
+C:\Users\sbryans\Documents\JerseyBuses\Branches\V2-ORD-03170\GitHub\BusWebsite\bin\System.Web.Mvc.dll
+C:\Users\sbryans\Documents\JerseyBuses\Branches\V2-ORD-03170\GitHub\BusWebsite\bin\System.Web.Mvc.xml
+C:\Users\sbryans\Documents\JerseyBuses\Branches\V2-ORD-03170\GitHub\BusWebsite\obj\Debug\Bus.dll
+C:\Users\sbryans\Documents\JerseyBuses\Branches\V2-ORD-03170\GitHub\BusWebsite\obj\Debug\Bus.pdb
+C:\Users\sbryans\Documents\JerseyBuses\Branches\V2-ORD-03170\GitHub\BusWebsite\bin\Microsoft.AI.Agent.Intercept.dll
+C:\Users\sbryans\Documents\JerseyBuses\Branches\V2-ORD-03170\GitHub\BusWebsite\bin\Microsoft.AI.DependencyCollector.dll
+C:\Users\sbryans\Documents\JerseyBuses\Branches\V2-ORD-03170\GitHub\BusWebsite\bin\Microsoft.AI.PerfCounterCollector.dll
+C:\Users\sbryans\Documents\JerseyBuses\Branches\V2-ORD-03170\GitHub\BusWebsite\bin\Microsoft.AI.ServerTelemetryChannel.dll
+C:\Users\sbryans\Documents\JerseyBuses\Branches\V2-ORD-03170\GitHub\BusWebsite\bin\Microsoft.AI.Web.dll
+C:\Users\sbryans\Documents\JerseyBuses\Branches\V2-ORD-03170\GitHub\BusWebsite\bin\Microsoft.AI.WindowsServer.dll
+C:\Users\sbryans\Documents\JerseyBuses\Branches\V2-ORD-03170\GitHub\BusWebsite\bin\Microsoft.ApplicationInsights.dll
+C:\Users\sbryans\Documents\JerseyBuses\Branches\V2-ORD-03170\GitHub\BusWebsite\bin\Microsoft.Web.Infrastructure.dll
+C:\Users\sbryans\Documents\JerseyBuses\Branches\V2-ORD-03170\GitHub\BusWebsite\bin\System.Web.Helpers.dll
+C:\Users\sbryans\Documents\JerseyBuses\Branches\V2-ORD-03170\GitHub\BusWebsite\bin\System.Web.Razor.dll
+C:\Users\sbryans\Documents\JerseyBuses\Branches\V2-ORD-03170\GitHub\BusWebsite\bin\System.Web.Webpages.Deployment.dll
+C:\Users\sbryans\Documents\JerseyBuses\Branches\V2-ORD-03170\GitHub\BusWebsite\bin\System.Web.Webpages.dll
+C:\Users\sbryans\Documents\JerseyBuses\Branches\V2-ORD-03170\GitHub\BusWebsite\bin\System.Web.Webpages.Razor.dll
+C:\Users\sbryans\Documents\JerseyBuses\Branches\V2-ORD-03170\GitHub\BusWebsite\bin\Microsoft.AI.DependencyCollector.xml
+C:\Users\sbryans\Documents\JerseyBuses\Branches\V2-ORD-03170\GitHub\BusWebsite\bin\Microsoft.AI.ServerTelemetryChannel.xml
+C:\Users\sbryans\Documents\JerseyBuses\Branches\V2-ORD-03170\GitHub\BusWebsite\bin\Microsoft.AI.Web.xml
+C:\Users\sbryans\Documents\JerseyBuses\Branches\V2-ORD-03170\GitHub\BusWebsite\bin\Microsoft.AI.WindowsServer.xml
+C:\Users\sbryans\Documents\JerseyBuses\Branches\V2-ORD-03170\GitHub\BusWebsite\bin\Microsoft.ApplicationInsights.xml
+C:\Users\sbryans\Documents\JerseyBuses\Branches\V2-ORD-03170\GitHub\BusWebsite\bin\System.Web.Razor.xml
+C:\Users\sbryans\Documents\JerseyBuses\Branches\V2-ORD-03170\GitHub\BusWebsite\bin\System.Web.Webpages.xml
+C:\Users\sbryans\Documents\JerseyBuses\Branches\V2-ORD-03170\GitHub\BusWebsite\bin\System.Web.Webpages.Deployment.xml
+C:\Users\sbryans\Documents\JerseyBuses\Branches\V2-ORD-03170\GitHub\BusWebsite\bin\System.Web.Webpages.Razor.xml
+C:\Users\sbryans\Documents\JerseyBuses\Branches\V2-ORD-03170\GitHub\BusWebsite\bin\System.Web.Helpers.xml

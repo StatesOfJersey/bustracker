@@ -1,0 +1,221 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+}
+
+<script src="http://d3js.org/d3.v3.min.js" type="text/javascript"></script>
+<link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.css" />
+<script src="http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.js"></script>
+<link href="https://api.tiles.mapbox.com/mapbox.js/v1.6.4/mapbox.css" rel="stylesheet" />
+<script src="https://api.tiles.mapbox.com/mapbox.js/v1.6.4/mapbox.js"></script>
+
+    <script src="~/Content/scripts/Index.js?version=1.4.1"></script>
+    <script src="~/Content/scripts/MenuClass.js?version=1.4.2"></script>
+    <script src="~/Content/scripts/BusClass.js?version=1.4.1"></script>
+<script src="~/Content/scripts/c5.js"></script>
+
+
+
+    <div data-role="page" id='busTrackerPage' data-theme="a" data-dom-cache="false">
+        <div data-role="header" data-theme="a">
+            <div class="sojiconandtext">
+                <span class="sojicon"></span>
+                <p>States of Jersey</p>
+            </div>
+            <a data-corners="false" data-shadow="false" data-theme="b" href="/" rel="external">Home</a>
+
+            <a data-corners="false" data-icon="sojlogin" data-iconpos="right" data-shadow="false" data-theme="b" href="#">Log in</a>
+
+
+        </div>
+        <div data-role="content" data-theme="a" id="busTrackerContent">
+            <ul class="subheader subheadericon" data-role="listview" data-theme="a" data-inset="false"><li><span class="navsprite sprite-BUS">&nbsp;</span><DIV class="navrow"><p>Bus live tracking</p></DIV></li></ul>                    <div class="beforeHtmlContent">
+
+            </div>
+
+
+            <style>
+                .ui-btn-icon-left > .ui-btn-inner > .ui-icon {
+                    margin-top: -9px;
+                }
+
+                .ui-mobile .ui-page .ui-slider-input,
+                .ui-mobile .ui-dialog .ui-slider-input {
+                    display: none;
+                }
+
+                #rangeValLabel, #stopRadiusValLabel {
+                    padding-bottom: 1em;
+                }
+
+                .subheader {
+                    height: 0px;
+                    display: none;
+                }
+
+                .expander {
+                    padding: 5px;
+                }
+
+                .bottomOfMenu {
+                    padding-bottom: 2em;
+                }
+            </style>
+
+            <div id="map-wrapper">
+                <div id="map"></div>
+
+                <!-- Privacy/Location Error -->
+                <div class="privacyErrorMenu">
+                    <div class="privacyErrorMenuContent" style="display: none;">
+                        <button data-role="none" class="closePrivacyBtn" onclick="closePrivacyError()"></button>
+                        <h2>We are struggling to locate you....</h2>
+                        <h3>Check your device location settings are enabled for this browser and that you aren't using private browsing.</h3>
+                    </div>
+                </div>
+                <!-- Settings Menu -->
+                <div class="busMenu busMenuShadow">
+                    <div id="menuLoading">
+                        <h2 style="vertical-align: central; text-align: center;">Loading bus routes..</h2>
+                    </div>
+                    <div class="busMenuContent" style="display: none;">
+                        <div id="menuRoutes">
+                            <div data-role="fieldcontain" class="busCheckboxes">
+
+                                <div data-inset="false" class="expander" data-role="collapsible" data-collapsed="false" data-collapsed-icon="arrow-r" data-expanded-icon="arrow-d">
+                                    <h2>Bus routes</h2>
+                                    <fieldset class="routeCategory" data-role="controlgroup">
+                                        <input type="checkbox" id="selectAll" class="selectAll" /><label for="selectAll">Select all routes</label>
+                                    </fieldset>
+                                    <fieldset id="routes" data-role="controlgroup">
+                                        <div id="busroutes"></div>
+                                        <input type="checkbox" id="school" class="schoolCb" checked /><label for="school">School buses</label>
+                                    </fieldset>
+                                </div>
+                                <div class="expander" data-inset="false" data-role="collapsible" data-collapsed="false" data-collapsed-icon="arrow-r" data-expanded-icon="arrow-d">
+                                    <h2>Options</h2>
+                                    <div>
+                                        <div>
+                                            <fieldset class="routeCategory" data-role="controlgroup">
+                                                <input type="checkbox" id="showRoutes" checked class="showRoutes" /><label for="showRoutes">Display routes on map</label>
+                                            </fieldset>
+                                        </div>
+                                        <h3 class="noPadding">Refresh rate</h3>
+                                        <div id="rangeValLabel"></div>
+                                        <input type="range" max="4" min="1"
+                                               onchange="document.getElementById('rangeValLabel').innerHTML = changeUpdateInterval(this.value)"
+                                               oninput="document.getElementById('rangeValLabel').innerHTML = changeUpdateInterval(this.value)"
+                                               step="1" id="rangeVal" list="steplist">
+                                        <datalist id="steplist">
+                                            <option>1</option>
+                                            <option>2</option>
+                                            <option>3</option>
+                                            <option>4</option>
+                                        </datalist>
+                                        <div id="locationSection">
+                                            <h2>Show bus stops near me</h2>
+                                            <div data-role="fieldcontain">
+                                                <fieldset data-role="controlgroup">
+                                                    <input type="checkbox" id="userLocation" class="locationCb" />
+                                                    <label for="userLocation">Use my location</label>
+                                                </fieldset>
+                                            </div>
+                                        </div>
+                                        <h3 class="noPadding">Show bus stops within</h3>
+                                        <div id="stopRadiusValLabel"></div>
+                                        <input class="slider" type="range" max="4" min="0"
+                                               onchange="document.getElementById('stopRadiusValLabel').innerHTML = changeStopRadius(this.value)"
+                                               oninput="document.getElementById('stopRadiusValLabel').innerHTML = changeStopRadius(this.value)"
+                                               step="1" id="stopRadiusVal" list="steplist">
+                                        <datalist id="steplist">
+                                            <option>0</option>
+                                            <option>1</option>
+                                            <option>2</option>
+                                            <option>3</option>
+                                            <option>4</option>
+                                            <option>5</option>
+                                        </datalist>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="bottomOfMenu"></div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Settings Menu Button -->
+                <div id="button-wrapper">
+                    <div class="backIcon" onclick="openMenu()" style="display: none"></div>
+                    <button class="btnStyle" data-role="none" onclick="openMenu()">Settings</button>
+                </div>
+            </div>
+
+            <script type="text/javascript">
+
+    function busTrackerPageInit() {
+
+        //http://localhost:49545/Bus/Tracker
+        init();
+
+        if (localStorage.getItem('showRoutes') === "false") {
+            $('#showRoutes').attr('checked', false).checkboxradio("refresh");
+        } else {
+            $('#showRoutes').attr('checked', true).checkboxradio("refresh");
+        }
+
+        // UI Changes
+        $(".selectAll").on("change", function () {
+            $('#routes :checkbox:not([disabled])').attr('checked', $(this).prop('checked')).checkboxradio("refresh");
+            selectedRoutesChanged();
+        });
+
+        $(".schoolCb").on("change", function () {
+            selectedRoutesChanged();
+        });
+
+        $(".showRoutes").on("change", function () {
+            if ($(this).is(":checked")) {
+                localStorage.setItem('showRoutes', "true");
+            } else {
+                localStorage.setItem('showRoutes', "false");
+            }
+            var prom = getBusRoutes();
+            $.when(prom).then(function (buses) {
+                localStorage.setItem('busRoutes', JSON.stringify(buses));
+                drawRoute(buses);
+            });
+        });
+
+
+        $(".locationCb").on("change", function () {
+            if ($(this).prop('checked') == true) {
+                localStorage.locEnabled = 1;
+            } else {
+                localStorage.locEnabled = 0;
+                svg.selectAll('.stopItem').remove();
+                userLocation = "";
+                hidePrivacyError();
+            }
+            getUserLocation(true);
+        });
+
+        function handleVisibilityChange() {
+            if (document.hidden) {
+                // STOP //
+            } else {
+                svg.selectAll('.busItem').remove();
+                getData(0, false);
+            }
+        }
+        document.addEventListener("visibilitychange", handleVisibilityChange, false);
+    }
+
+            </script>
+
+
+
+            <div class="afterHtmlContent">
+
+            </div>
+        </div>
+    </div>
+

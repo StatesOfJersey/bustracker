@@ -1,0 +1,98 @@
+﻿body {
+    padding-top: 50px;
+    padding-bottom: 20px;
+}
+
+/* Set padding to keep content from hitting the edges */
+.body-content {
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+/* Set width on the form input elements since they're 100% wide by default */
+input,
+select,
+textarea {
+    max-width: 280px;
+}
+
+#stops {
+    font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+}
+
+    #stops td, #stops th {
+        border: 1px solid #ddd;
+        padding: 8px;
+    }
+
+    #stops tr:nth-child(even) {
+        background-color: #f2f2f2;
+    }
+
+    #stops tr:hover {
+        background-color: #ddd;
+    }
+
+
+    #stops th {
+        padding-top: 12px;
+        padding-bottom: 12px;
+        text-align: left;
+        background-color: #4CAF50;
+        color: white;
+    }
+
+.paddingTop {
+    padding-top: 20px;
+}
+
+.paddingTopSmall {
+    padding-top: 10px;
+}
+
+input[type=button], input[type=submit], input[type=reset] {
+    background-color: #4CAF50;
+    border: none;
+    color: white;
+    padding: 8px 16px;
+    text-decoration: none;
+    margin: 0px 2px;
+    cursor: pointer;
+}
+
+.warningMessage {
+    color: red;
+    font-weight: 400;
+}
+
+input[type=file] {
+    border: none;
+    color: white;
+    height: 30px;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.fileinput-button input {
+    position: absolute;
+    top: 0;
+    right: 0;
+    margin: 0;
+    opacity: 0;
+    -ms-filter: 'alpha(opacity=0)';
+    font-size: 200px !important;
+    direction: ltr;
+    cursor: pointer;
+}
+
+input[type=file] {
+    display: block;
+}
+
+input, button, select, textarea {
+    font-family: inherit;
+    font-size: inherit;
+    line-height: inherit;
+}

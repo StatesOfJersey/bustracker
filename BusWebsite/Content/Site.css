@@ -1,0 +1,298 @@
+﻿
+
+
+html,
+body {
+    height: 100% !important;
+    width: 100%;
+    margin: 0;
+    font-size: 11px;
+    font-family: 'Open Sans', sans-serif;
+    -webkit-font-smoothing: antialiased;
+    overflow:hidden;
+}
+
+#map {
+    width: 100%;
+    height: 100%;
+    background-color: #e6f2ff;
+}
+#map-wrapper {
+    width: 100%;
+    height: 100%;
+    position: relative;
+}
+
+/*  POPUP MENU & OVERLAY BUTTON  */
+#button-wrapper {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    width: 100%;
+    height: 53px;
+    background-color: white;
+    opacity: 0.95;
+    border-bottom: 1px solid black;
+}
+
+.btnStyle {
+    position: absolute;
+    top: 12px;
+    left: 17px;
+    width: 80px;
+    height: 30px;
+    color: white;
+    background-color: #999999;
+    border-style: none;
+    outline: none;
+    border-radius: 2px;
+   /* background-image: url('images/hamburger.png'); */
+}
+
+.btnStyle.highlight {
+    background-color: #b80006;
+    left: 37px;
+   /* background-image: url('images/hamburger-highlight.png'); */
+}
+
+.backIcon {
+    position: absolute;
+    top: 12px;
+    left: 2px;
+    width: 30px;
+    height: 30px;
+    background-image: url('images/backIcon.png');
+}
+
+
+
+.popup {
+    position: relative;
+    top: 0;
+    left: 0;
+    background-color: #fff;
+    width: 200px;
+    border: 1px #ccc solid;
+    border-radius: 6px;
+    padding: 8px;
+    font-family: 'Open Sans', sans-serif;
+}
+
+.popup h4 {
+    opacity: 0.7;
+    font-size: 12px !important;
+    padding-top: -20px !important;
+}
+
+
+
+
+.busMenu{
+    min-height: 100%;
+    width: 0;
+    background-color: white;
+    position: absolute;
+    top: 53px;
+    bottom: 0px;
+    opacity: 0.95;
+    overflow-y: auto !important;
+}
+
+/* Force custom scrollbar for iOS */
+::-webkit-scrollbar {
+    width: 5px;
+    height: 15px;
+}
+::-webkit-scrollbar-thumb {
+    border-radius: 8px;
+    background-color: #C3C3C3;
+    margin-right: 2px;
+}
+
+
+.busMenuContent { 
+    margin-top: 20px;
+    margin-left: 20px;
+    height: 550px;
+}
+
+
+.busMenuShadow {
+    box-shadow: -10px 20px 50px #e4e8ec;
+}
+
+
+.busItem, .stopItem {
+    cursor: pointer;
+}
+
+
+input[type=checkbox].css-checkbox {
+			position:absolute; z-index:-1000; left:-1000px; overflow: hidden; clip: rect(0 0 0 0); height:1px; width:1px; margin:-1px; padding:0; border:0;
+		}
+
+		input[type=checkbox].css-checkbox + label.css-label {
+			padding-left:22px;
+			height:17px; 
+			display:inline-block;
+			line-height:17px;
+			background-repeat:no-repeat;
+			background-position: 0 0;
+			font-size:12px;
+			vertical-align:middle;
+			cursor:pointer;
+
+		}
+
+		input[type=checkbox].css-checkbox:checked + label.css-label {
+			background-position: 0 -17px;
+		}
+    label.css-label {
+    background-image: url('images/checkboxes.png');
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+
+.pushRight {
+    margin-right: 65px;
+}
+
+.noPadding {
+    margin-bottom: 3px !important;
+}
+
+
+.privacyErrorMenu {
+    width: 100%;
+    height: 0;
+    background-color: #eb898d;
+    color: white;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    text-align: center;
+}
+
+.closePrivacyBtn {
+
+    background-image: url('images/closeicon.png');
+    background-repeat: no-repeat;
+    width: 34px;
+    height: 36px;
+    background-color: transparent;
+    border: none;
+    position: absolute;
+    right: 10px;
+    top: 10px;
+    outline: none;
+    
+}
+
+
+.closePopupBtn {
+    background-image: url('images/closePopup.png');
+    background-repeat: no-repeat;
+    width: 35px;
+    height: 35px;
+    background-color: transparent;
+    border: none;
+    position: absolute;
+    right: -15px;
+    top: -15px;
+    outline: none;
+}
+
+
+
+.splashScreen {
+    position: absolute;
+    top: -100%;
+    bottom: 5%;
+    left: 5%;
+    right: 5%;
+    background-color: white;
+    border-radius: 2px; 
+}
+
+.splashScreenShadow {
+  box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+  transition: all 0.2s ease-in-out;   
+}
+
+.splashScreenShadow:hover {
+  box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
+}
+
+
+.agreeSplash {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    width: 60px;
+    height: 30px;
+    color: white;
+    background-color: #b80006;
+    border-style: none;
+    outline: none;
+    border-radius: 2px;
+}
+
+
+
+
+input[type=range] {
+    width: 200px;
+}
+
+input[type=range]::-ms-tooltip {
+    display: none;
+}
+
+
+input[type="range"]::-ms-fill-lower {
+        background-color: #b90006;
+}
+
+
+.leaflet-control-zoom-out {
+    
+  -ms-transform: rotate(-90deg); /* IE 9 */
+  -webkit-transform: rotate(-90deg); /* Chrome, Safari, Opera */
+  transform: rotate(-90deg); 
+}
+
+.leaflet-control-zoom {
+    -ms-transform: rotate(90deg); /* IE 9 */
+    -webkit-transform: rotate(90deg); /* Chrome, Safari, Opera */
+    transform: rotate(90deg);
+    position: absolute;
+    right: 20px;
+    top: -10px;
+}
+
+
+@media only screen and (max-device-width: 480px) {
+  /* define mobile specific styles come here */
+     .leaflet-control-zoom { 
+        top: -14px;
+        margin-top: 9px !important;
+     }
+
+    .leaflet-control-zoom-out {
+        background-position-y: -24px !important;
+        background-position-x: 2px !important;
+    }
+
+    .leaflet-control-zoom-in {
+        background-position-y: 2px !important;
+        background-position-x: 2px !important;
+    }
+
+
+}

@@ -1,0 +1,13 @@
+C:\Users\sbryans\Documents\JerseyBuses\Branches\V2-ORD-03170\GitHub code\Tracking Common\bin\Debug\Tracking Common.dll
+C:\Users\sbryans\Documents\JerseyBuses\Branches\V2-ORD-03170\GitHub code\Tracking Common\bin\Debug\Tracking Common.pdb
+C:\Users\sbryans\Documents\JerseyBuses\Branches\V2-ORD-03170\GitHub code\Tracking Common\bin\Debug\Newtonsoft.Json.dll
+C:\Users\sbryans\Documents\JerseyBuses\Branches\V2-ORD-03170\GitHub code\Tracking Common\bin\Debug\Newtonsoft.Json.xml
+C:\Users\sbryans\Documents\JerseyBuses\Branches\V2-ORD-03170\GitHub code\Tracking Common\obj\Debug\Tracking Common.csprojResolveAssemblyReference.cache
+C:\Users\sbryans\Documents\JerseyBuses\Branches\V2-ORD-03170\GitHub code\Tracking Common\obj\Debug\Tracking Common.dll
+C:\Users\sbryans\Documents\JerseyBuses\Branches\V2-ORD-03170\GitHub code\Tracking Common\obj\Debug\Tracking Common.pdb
+C:\Users\sbryans\Documents\JerseyBuses\Branches\V2-ORD-03170\GitHub\Tracking Common\bin\Debug\Tracking Common.dll
+C:\Users\sbryans\Documents\JerseyBuses\Branches\V2-ORD-03170\GitHub\Tracking Common\bin\Debug\Tracking Common.pdb
+C:\Users\sbryans\Documents\JerseyBuses\Branches\V2-ORD-03170\GitHub\Tracking Common\bin\Debug\Newtonsoft.Json.dll
+C:\Users\sbryans\Documents\JerseyBuses\Branches\V2-ORD-03170\GitHub\Tracking Common\bin\Debug\Newtonsoft.Json.xml
+C:\Users\sbryans\Documents\JerseyBuses\Branches\V2-ORD-03170\GitHub\Tracking Common\obj\Debug\Tracking Common.dll
+C:\Users\sbryans\Documents\JerseyBuses\Branches\V2-ORD-03170\GitHub\Tracking Common\obj\Debug\Tracking Common.pdb
