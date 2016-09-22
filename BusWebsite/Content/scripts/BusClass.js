@@ -144,15 +144,9 @@ function drawRoute(routedata) {
         return;
     }
 
-    var mode = "";
+    var mode = (zoom > 14)? "linear" : "basis";
     var zoom = map.getZoom();
 
-    if (zoom > 14) {
-        mode = "linear";
-    }
-    else {
-        mode = "basis";
-    }
 
     var lineFunction = d3.svg.line()
         .x(function (d) {
@@ -164,21 +158,63 @@ function drawRoute(routedata) {
             return map.latLngToLayerPoint(latlng).y;
         }).interpolate(mode);
 
-    var coordinates = routedata["routes"];
+    var routes = routedata["routes"];
+    var routeColour;
+    var lastRouteNumber;
+    var lineStyle;
 
-    for (var i = 0; i < coordinates.length; i++) {
-        var obj = coordinates[i];
-        if (obj["RouteCoordinates"] != null && getRouteVisibility(obj) === 'visible') {
+
+    for (var i = 0; i < routes.length; i++) {
+        var route = routes[i];
+        routeColour = route["Colour"];
 
 
-            //.style("stroke-dasharray", ("3, 3"))
+        if (route["direction"] == "I")
+            console.log("inbound route found");
+        
+        if (route["RouteCoordinates"] != null && getRouteVisibility(route) === 'visible') {
+            var lastSection;
+            var sectionBoundaries = [0];
 
-            var lineGraph = svg.append("path")
-            .attr("d", lineFunction(obj["RouteCoordinates"]))
-            .attr('class', 'route')
-            .attr("stroke", getBusColourHex(obj["Number"], routedata))
-            .attr("stroke-width", 2)
-            .attr("fill", "none");
+            for (var j = 0; j < route["RouteCoordinates"].length; j++) {
+                var coordinateItem = route["RouteCoordinates"][j];
+
+                if (coordinateItem["splitSection"] != null && lastSection != coordinateItem["splitSection"]) {
+                    lastSection = coordinateItem["splitSection"];
+                    sectionBoundaries.push([j]);
+                }
+            }
+            
+            for (var k = 0; k < sectionBoundaries.length; k++) {
+                var firstPointOfSection = route["RouteCoordinates"][sectionBoundaries[k]];
+                lineStyle = (firstPointOfSection["direction"] == "I") ? "5, 5" : "none"; // I=Inbound
+
+                if (sectionBoundaries.length == 1) { //just one section so output it
+                    var lineGraph = svg.append("path")
+                      .attr("d", lineFunction(route["RouteCoordinates"]))
+                      .attr('class', 'route')
+                      .attr("stroke", routeColour)
+                      .attr("stroke-width", 2)
+                      .attr("fill", "none")
+                      .attr("stroke-dasharray", lineStyle);              
+                } else if (k == sectionBoundaries.length - 1) { //last one in the array so from here to the end
+                    var lineGraph = svg.append("path")
+                      .attr("d", lineFunction(route["RouteCoordinates"].slice(sectionBoundaries[k], route["RouteCoordinates"].length)))
+                      .attr('class', 'route')
+                      .attr("stroke", routeColour)
+                      .attr("stroke-width", 2)
+                      .attr("fill", "none")
+                      .attr("stroke-dasharray", lineStyle);
+                } else { // a mid route section
+                    var lineGraph = svg.append("path")
+                     .attr("d", lineFunction(route["RouteCoordinates"].slice(sectionBoundaries[k], sectionBoundaries[k+1])))
+                     .attr('class', 'route')
+                     .attr("stroke", routeColour)
+                     .attr("stroke-width", 2)
+                     .attr("fill", "none")
+                     .attr("stroke-dasharray", lineStyle);
+                }
+            }
         }
     }
 
@@ -372,7 +408,6 @@ function stopClicked(d) {
         popup.append("h4")
             .attr("class", "loadingMessage")
             .text("Loading...");
-        //http://localhost:55421/api/Values/BusStop/
         //http://sojbuslivetimespublic.azurewebsites.net/api/Values/BusStop/
         d3.json("http://uat-sojbuslivetimespublic.azurewebsites.net//api/Values/BusStop/" + d["StopNumber"], function (data) {
             drawEtaTable(popup, data);

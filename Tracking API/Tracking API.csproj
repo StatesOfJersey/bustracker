@@ -209,11 +209,6 @@
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Service References\Application Insights\ConnectedService.json" />
-    <Content Include="Views\Stops\UpdateStops.cshtml" />
-    <Content Include="Views\Stops\ValidationSuccess.cshtml" />
-    <Content Include="Views\Stops\UploadFailed.cshtml" />
-    <Content Include="Views\Stops\ValidationFailed.cshtml" />
-    <Content Include="Views\Stops\StopsConfirmed.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Providers\" />
