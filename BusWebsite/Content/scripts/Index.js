@@ -12,7 +12,7 @@ var myTimer;
 
 function init() {
 
-    loadStopRadius();
+    loadBusStopRadius();
 
 
     // MAPBOX (Free for 50,000 views/mon   -    https://www.mapbox.com/pricing/)
@@ -61,20 +61,20 @@ function init() {
     var prom = getBusRoutes();
     $.when(prom).then(function (buses) {
         localStorage.setItem('busRoutes', JSON.stringify(buses));
-        setBusRoutes(getSelectionData());
-        drawRoute(buses);
+        setBusRoutes(getUserPreferencesForRoutesFromStorageOrCheckboxes());
+        drawRoutes(buses);
     });
 
     getUserLocation(true);
     var interval = loadUpdateInterval();
 
     clearInterval(myTimer);
-    myTimer = setInterval(function () { getData(interval.duration, true); }, interval.update);
+    myTimer = setInterval(function () { getBusLocationData(interval.duration, true); }, interval.update);
 
     map.on('moveend', function () {
         if (map.getZoom() >= 16 && stopRadius != 0) {
             userLocation = "&lat=" + map.getCenter().lat + "&lon=" + map.getCenter().lng;
-            getData(0, true);
+            getBusLocationData(0, true);
             isZoomed = true;
         }
         else {
@@ -90,9 +90,9 @@ function init() {
         var prom = getBusRoutes();
         $.when(prom).then(function (buses) {
             localStorage.setItem('busRoutes', JSON.stringify(buses));
-            drawRoute(buses);
+            drawRoutes(buses);
         });
-        getData(0, false);
+        getBusLocationData(0, false);
         getUserLocation();
     });
 
@@ -136,7 +136,7 @@ function getBusRoutes() {
 }
 
 
-function getData(duration, reloadData) {
+function getBusLocationData(duration, reloadData) {
 
     if (reloadData || typeof cachedData === 'undefined') {
         // If location is turned on, build parameters

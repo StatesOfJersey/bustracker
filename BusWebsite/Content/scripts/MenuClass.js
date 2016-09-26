@@ -58,25 +58,24 @@ function closeSplash() {
     localStorage.hasLaunched = 1;
 }
 
-function getSelectionData() {
+function getUserPreferencesForRoutesFromStorageOrCheckboxes() {
     if (typeof (Storage) !== "undefined") {
-        if (localStorage.selectionList) {
-            return localStorage.selectionList;
+        if (localStorage.listOfBusesToSuppress) {
+            return localStorage.listOfBusesToSuppress;
         }
     }
     //Go off checkboxes as in incognito
-    return getCheckedRoutesString();
+    return getUserPreferencesForRoutesFromCheckboxes();
 }
 
 
-function setBusRoutes(defaultCheckedItems) {
+function setBusRoutes(userPreferencesForRoutes) {
 
     $("#menuLoading").show();
     var container = document.getElementById('busroutes');
     var busrPromise = getBusRoutes();
 
-    $.when(busrPromise
-    ).then(function (busr) {
+    $.when(busrPromise).then(function (busr) {
         //Get and sort the routes asec by numerical value
         localStorage.setItem('busRoutes', JSON.stringify(busr));
         var routes = busr["routes"];
@@ -84,29 +83,28 @@ function setBusRoutes(defaultCheckedItems) {
             return parseInt(getBusNumberWithoutLetters(a.Number)) - parseInt(getBusNumberWithoutLetters(b.Number));
         });
 
-        var arraylist;
-        if (defaultCheckedItems !== undefined) {
-            arraylist = defaultCheckedItems.split(',');
+        var userPreferencesForRoutesArray;
+        if (userPreferencesForRoutes !== undefined) {
+            userPreferencesForRoutesArray = userPreferencesForRoutes.split(',');
         }
-        var count = 0;
+
         var anyNotChecked = false;
         for (var route in routes) {
-            var isChecked = false;
+            var isChecked = true; // buses show by default unless a user has explicitly chosen to suppress a route number
             var busName = tidyBusName(routes[route].Name);
             var busNumber = routes[route].Number;
-            var newId = "chk" + count;
+            var busCheckBox = "chk" + busNumber;
             //See if route should be checked by default
-            if (defaultCheckedItems !== undefined && arraylist != null) {
-                isChecked = contains(arraylist, busNumber);
+            if (userPreferencesForRoutes !== undefined && userPreferencesForRoutesArray != null) {
+                isChecked = !contains(userPreferencesForRoutesArray, busNumber); //if a preference exists for a route it means the user chose not to see it
             }
             if (!isChecked && !anyNotChecked) {
                 anyNotChecked = true;
             }
             //Styles should be in css except for background
-            $('<input/>', { type: 'checkbox', defaultValue: 10, checked: isChecked, id: newId, value: busNumber, name: "busChk" }).appendTo(container);
-            var routeName = '<span style="vertical-align: middle; line-height: 32px; float: left">' + busName + '</span>' + '<div style="float: right; width: 32px; height: 32px; background:' + getBusColourHex(busNumber, busr) + ';" text-align: center;>' + '<span  style="color:' + getBusTextColors(busNumber) + '; font-weight:bold; vertical-align: middle; line-height: 32px; display:table; margin:0 auto;">' + busNumber + '</span>' + '</div>';
-            $('<label />', { 'for': "chk" + count, html: routeName }).appendTo(container);
-            count++;
+            $('<input/>', { type: 'checkbox', defaultValue: 10, checked: isChecked, id: busCheckBox, value: busNumber, name: "busChk" }).appendTo(container);
+            var selectableRoute = '<span style="vertical-align: middle; line-height: 32px; float: left">' + busName + '</span>' + '<div style="float: right; width: 32px; height: 32px; background:' + getBusColourHex(busNumber, busr) + ';" text-align: center;>' + '<span  style="color:' + getBusTextColourHex(busNumber, busr) + '; font-weight:bold; vertical-align: middle; line-height: 32px; display:table; margin:0 auto;">' + busNumber + '</span>' + '</div>';
+            $('<label />', { 'for': busCheckBox, html: selectableRoute }).appendTo(container);
         }
         //Everything was selected so select all should be ticked
         if (!anyNotChecked) { $('.selectAll').attr('checked', true).checkboxradio("refresh"); }
@@ -142,44 +140,46 @@ function getBusNumberWithoutLetters(busNumber) {
 }
 
 function selectedRoutesChanged() {
-    setSelectionData();
+    storePreferenceForBusRoutes();
     var prom = getBusRoutes();
     $.when(prom).then(function (buses) {
         localStorage.setItem('busRoutes', JSON.stringify(buses));
-        drawRoute(buses);
+        //console.log('busRoutes stored: ' + JSON.stringify(buses));
+        drawRoutes(buses);
     });
-    getData(0, true);
+    getBusLocationData(0, true);
 }
 
 function isDisplayRoutesOnMapChecked() {
     return document.getElementById('showRoutes').checked;
 }
 
-function getCheckedRoutesString() {
-    var checkedRoutes = $("input[name=busChk]:checked").map(
+function getUserPreferencesForRoutesFromCheckboxes() {
+    var routesToSuppress = $("input[name=busChk]:not(:checked)").map(
         function () { return this.value; }).get().join(",");
 
-    if ($(school).attr("checked")) {
-        if (checkedRoutes !== "") {
-            checkedRoutes = checkedRoutes + ",school";
+    if (!$(school).attr("checked")) {
+        if (routesToSuppress !== "") {
+            routesToSuppress = routesToSuppress + ",school";
         } else {
-            checkedRoutes = "school";
+            routesToSuppress = "school";
         }
     }
 
-    return checkedRoutes;
+    return routesToSuppress;
 }
 
 //include buses
-function setSelectionData() {
+function storePreferenceForBusRoutes() {
 
-    var selectionStr = getCheckedRoutesString();
+    var userSelection = getUserPreferencesForRoutesFromCheckboxes();
 
-    if (selectionStr.length === 0) {
-        // Null localstorage will return 'undefinded' and default to private mode showing all buses.
-        selectionStr = ".";
+    if (userSelection.length === 0) {
+        // Null localstorage will return 'undefined' and default to private mode showing all buses.
+        userSelection = "*";
     }
-    localStorage.selectionList = selectionStr;
+    localStorage.listOfBusesToSuppress = userSelection;
+    //console.log('listOfBusesToSuppress: ' + userSelection);
 }
 
 // TODO: Duplication needs cleanup
@@ -252,11 +252,11 @@ function changeUpdateInterval(intValue) {
         duration = 10000;
     }
 
-    myTimer = setInterval(function () { getData(duration, true); }, interval);
+    myTimer = setInterval(function () { getBusLocationData(duration, true); }, interval);
     return labelStr;
 }
 
-function loadStopRadius() {
+function loadBusStopRadius() {
 
     var stopRadiusVal;
 
@@ -355,28 +355,28 @@ function getUserLocation(isFirstCall) {
                 }
 
                 if (isFirstCall) {
-                    getData(0, true);
+                    getBusLocationData(0, true);
                 }
 
 
             }, function (error) {
                 console.log('Location failed with error: ' + error.code);
                 if (isFirstCall) {
-                    getData(0, true);
+                    getBusLocationData(0, true);
                 }
             }, { timeout: 5000 });
         } else {
             // Browser not supported
             d3.select("#locationSection").remove();
             if (isFirstCall) {
-                getData(0, true);
+                getBusLocationData(0, true);
             }
         }
     } else {
         d3.select(".userLocation").remove();
         $(".locationCb").prop('checked', false).checkboxradio('refresh');
         if (isFirstCall) {
-            getData(0, true);
+            getBusLocationData(0, true);
         }
     }
 

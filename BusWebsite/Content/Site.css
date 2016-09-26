@@ -1,298 +1,636 @@
-﻿
+﻿/* Styles for validation helpers
+-----------------------------------------------------------*/
 
+/* For the SOJ Mobile site to work correctly, this must be the last of the CSS files loaded for any overriding of default styles to work correctly.*/
 
-html,
-body {
-    height: 100% !important;
-    width: 100%;
-    margin: 0;
-    font-size: 11px;
-    font-family: 'Open Sans', sans-serif;
-    -webkit-font-smoothing: antialiased;
-    overflow:hidden;
-}
-
-#map {
-    width: 100%;
-    height: 100%;
-    background-color: #e6f2ff;
-}
-#map-wrapper {
-    width: 100%;
-    height: 100%;
-    position: relative;
-}
-
-/*  POPUP MENU & OVERLAY BUTTON  */
-#button-wrapper {
-    position: absolute;
-    top: 0px;
-    left: 0px;
-    width: 100%;
-    height: 53px;
-    background-color: white;
-    opacity: 0.95;
-    border-bottom: 1px solid black;
-}
-
-.btnStyle {
-    position: absolute;
-    top: 12px;
-    left: 17px;
-    width: 80px;
-    height: 30px;
-    color: white;
-    background-color: #999999;
-    border-style: none;
-    outline: none;
-    border-radius: 2px;
-   /* background-image: url('images/hamburger.png'); */
-}
-
-.btnStyle.highlight {
-    background-color: #b80006;
-    left: 37px;
-   /* background-image: url('images/hamburger-highlight.png'); */
-}
-
-.backIcon {
-    position: absolute;
-    top: 12px;
-    left: 2px;
-    width: 30px;
-    height: 30px;
-    background-image: url('images/backIcon.png');
-}
-
-
-
-.popup {
-    position: relative;
-    top: 0;
-    left: 0;
-    background-color: #fff;
-    width: 200px;
-    border: 1px #ccc solid;
-    border-radius: 6px;
-    padding: 8px;
-    font-family: 'Open Sans', sans-serif;
-}
-
-.popup h4 {
-    opacity: 0.7;
-    font-size: 12px !important;
-    padding-top: -20px !important;
-}
-
-
-
-
-.busMenu{
-    min-height: 100%;
-    width: 0;
-    background-color: white;
-    position: absolute;
-    top: 53px;
-    bottom: 0px;
-    opacity: 0.95;
-    overflow-y: auto !important;
-}
-
-/* Force custom scrollbar for iOS */
-::-webkit-scrollbar {
-    width: 5px;
-    height: 15px;
-}
-::-webkit-scrollbar-thumb {
-    border-radius: 8px;
-    background-color: #C3C3C3;
-    margin-right: 2px;
-}
-
-
-.busMenuContent { 
-    margin-top: 20px;
-    margin-left: 20px;
-    height: 550px;
-}
-
-
-.busMenuShadow {
-    box-shadow: -10px 20px 50px #e4e8ec;
-}
-
-
-.busItem, .stopItem {
-    cursor: pointer;
-}
-
-
-input[type=checkbox].css-checkbox {
-			position:absolute; z-index:-1000; left:-1000px; overflow: hidden; clip: rect(0 0 0 0); height:1px; width:1px; margin:-1px; padding:0; border:0;
-		}
-
-		input[type=checkbox].css-checkbox + label.css-label {
-			padding-left:22px;
-			height:17px; 
-			display:inline-block;
-			line-height:17px;
-			background-repeat:no-repeat;
-			background-position: 0 0;
-			font-size:12px;
-			vertical-align:middle;
-			cursor:pointer;
-
-		}
-
-		input[type=checkbox].css-checkbox:checked + label.css-label {
-			background-position: 0 -17px;
-		}
-    label.css-label {
-    background-image: url('images/checkboxes.png');
-    -webkit-touch-callout: none;
-    -webkit-user-select: none;
-    -khtml-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
-}
-
-
-.pushRight {
-    margin-right: 65px;
-}
-
-.noPadding {
-    margin-bottom: 3px !important;
-}
-
-
-.privacyErrorMenu {
-    width: 100%;
-    height: 0;
-    background-color: #eb898d;
-    color: white;
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
+.field-validation-error {
+    color: #f00;
+    display: block;
+    margin-top: 8px;
     text-align: center;
 }
 
-.closePrivacyBtn {
-
-    background-image: url('images/closeicon.png');
-    background-repeat: no-repeat;
-    width: 34px;
-    height: 36px;
-    background-color: transparent;
-    border: none;
-    position: absolute;
-    right: 10px;
-    top: 10px;
-    outline: none;
-    
+.field-validation-valid {
+    display: none;
 }
 
-
-.closePopupBtn {
-    background-image: url('images/closePopup.png');
-    background-repeat: no-repeat;
-    width: 35px;
-    height: 35px;
-    background-color: transparent;
-    border: none;
-    position: absolute;
-    right: -15px;
-    top: -15px;
-    outline: none;
+.input-validation-error {
+    border: 1px solid #f00;
+    background-color: #fee;
 }
 
-
-
-.splashScreen {
-    position: absolute;
-    top: -100%;
-    bottom: 5%;
-    left: 5%;
-    right: 5%;
-    background-color: white;
-    border-radius: 2px; 
+.validation-summary-errors {
+    font-weight: bold;
+    color: #f00;
 }
 
-.splashScreenShadow {
-  box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
-  transition: all 0.2s ease-in-out;   
-}
-
-.splashScreenShadow:hover {
-  box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
-}
-
-
-.agreeSplash {
-    position: absolute;
-    bottom: 10px;
-    right: 10px;
-    width: 60px;
-    height: 30px;
-    color: white;
-    background-color: #b80006;
-    border-style: none;
-    outline: none;
-    border-radius: 2px;
-}
-
-
-
-
-input[type=range] {
-    width: 200px;
-}
-
-input[type=range]::-ms-tooltip {
+.validation-summary-valid {
     display: none;
 }
 
 
-input[type="range"]::-ms-fill-lower {
-        background-color: #b90006;
+/* jQuery mobile styles
+-----------------------------------------------------------*/
+
+/* Make listview buttons fill the whole horizontal width of the screen */
+.ui-li .ui-btn-inner a.ui-link-inherit, .ui-li-static.ui-li {
+    padding-right: 15px;
 }
 
-
-.leaflet-control-zoom-out {
-    
-  -ms-transform: rotate(-90deg); /* IE 9 */
-  -webkit-transform: rotate(-90deg); /* Chrome, Safari, Opera */
-  transform: rotate(-90deg); 
+.ui-bar-a, .ui-body-a, .ui-btn-up-a, .ui-btn-hover-a, .ui-btn-down-a,
+.ui-bar-b, .ui-body-b, .ui-btn-up-b, .ui-btn-hover-b, .ui-btn-down-b,
+.ui-bar-c, .ui-body-c, .ui-btn-up-c, .ui-btn-hover-c, .ui-btn-down-c,
+.ui-bar-d, .ui-body-d, .ui-btn-up-d, .ui-btn-hover-d, .ui-btn-down-d,
+.ui-bar-e, .ui-body-e, .ui-btn-up-e, .ui-btn-hover-e, .ui-btn-down-e,
+.ui-btn-active  {
+    text-shadow: none;
 }
 
-.leaflet-control-zoom {
-    -ms-transform: rotate(90deg); /* IE 9 */
-    -webkit-transform: rotate(90deg); /* Chrome, Safari, Opera */
-    transform: rotate(90deg);
+/* Subheader */
+.ui-content .subheader {
+    margin-bottom: 0;
+}
+
+.subheadericon .ui-li {
+    padding-left: 50px;
+}
+
+/* Navigation Menu */
+.ui-content .navHomeMenu {
+    /*margin-top : 0;*/
+    margin-bottom: 1em;
+}
+
+.ui-content .navSubMenu {
+    margin-top : 0px;
+    margin-bottom: 1em;
+}
+
+/* General Appication Page Tables */
+.appTable {
+    /*border: thin solid gray;*/
+    border-spacing: 2px;
+    border-collapse: collapse;
+    background-color: white;
+    font-family: Arial;
+    font-size: 13px;
+    font-weight: normal;
+}
+
+.appTable th {
+    /*border: thin none gray;*/
+    padding: 1px;
+    background-color: rgb(48, 48, 48);
+    color: #FFFFFF;
+    vertical-align: top;
+    padding-left: 4px;
+}
+.appTable td {
+    border: thin none gray;
+    padding: 3px 2px 3px 2px;
+    text-align: center;
+    vertical-align: top;
+}
+
+.appTable#carParking th:first-child, .appTable#carParking td:first-child {
+    text-align: left;
+}
+
+.appTable tr#even {
+    background-color: #EEEEEE;
+}
+
+.appTable#harbourarrivals tr:not(#even), .appTable#harbourdepartures tr:not(#even) {
+    background-color: #D3DFEE;
+}
+
+.appTable#harbourarrivals tr#even, .appTable#harbourdepartures tr#even {
+    background-color: rgb(255,255,255);
+}
+
+.appTable#harbourarrivals, .appTable#harbourdepartures {
+    width: 100%;
+}
+
+.appTable#harbourarrivals td , .appTable#harbourdepartures td  {
+    vertical-align: top;
+    text-align: left;
+}
+
+.appTable#harbourarrivals td:first-child, .appTable#harbourdepartures td:first-child {
+    min-width: 4em;
+}
+
+.appTable#harbourarrivals, .appTable#harbourdepartures {
+    border-collapse: separate;
+    border-spacing: 0px 0.5em;
+}
+
+.appTable .vessel {
+    font-style:italic;
+}
+
+.appTable .vesselestimated {
+    font-weight:bold;
+}
+
+.appTable .vesseldelayed {
+    color: red;
+    font-weight:bold;
+}
+
+.appTable .vesselcancelled {
+    color: red;
+    font-weight:bold;
+}
+
+.appTable .harbourstatus {
+    text-indent: 2em;
+}
+
+/* appTable right arrow */
+.appTableArrowDiv {
+    min-width: 22px;
+    position: relative;
+}
+
+.appTableArrowR {
+    background-attachment: scroll;
+    background-clip: border-box;
+    background-color: rgba(51, 51, 51, 1);
+    background-image: url("images/icons-18-white.png");
+	background-position: 	-108px 50%;
+    background-origin: padding-box;
+    background-position-x: -108px;
+    background-position-y: 50%;
+    background-repeat: no-repeat;
+    background-size: auto;
+    border-bottom-left-radius: 9px;
+    border-bottom-right-radius: 9px;
+    border-top-left-radius: 9px;
+    border-top-right-radius: 9px;
+    /*box-shadow: 0px 1px 0px rgba(255,255,255,0.4);*/
+    color: #fff;
+    height: 18px;
+    margin-top: -9px;
     position: absolute;
-    right: 20px;
-    top: -10px;
+    left: 0px;
+    top: 50%;
+    width: 18px;
+
+	/*-moz-border-radius: 				9px;
+	-webkit-border-radius: 				9px;
+	border-radius: 						9px;
+	-moz-box-shadow: 0px 1px 0 rgba(255,255,255,.4); /*{global-icon-shadow}*/
+	-webkit-box-shadow: 0px 1px 0 rgba(255,255,255,.4); /*{global-icon-shadow}*/
+	box-shadow: 0px 1px 0 rgba(255,255,255,.4); /*{global-icon-shadow}*/
+
+}
+
+/* Airport Departues/Arrivals */
+.appTable#airportarrivals tr:hover, .appTable#airportarrivals tr:active, .appTable#airportdepartures tr:hover, .appTable#airportdepartures tr:active {
+	background: #b80006;
+	color: #ffffff;
+}
+
+.appTable#airportarrivals tr td:first-child, .appTable#airportdepartures tr td:first-child {
+    padding-top: .8em;
+    padding-bottom: .8em;
+}
+
+.appTable td {
+    vertical-align: middle;
+}
+
+/* Live Flight page */
+.liveFlight {
+    width: 100%;
+}
+
+.liveFlight td {
+    padding-top: 1em;
+    padding-bottom: 1em;
+}
+
+.liveFlight td:last-child {
+    text-align: right;
+    font-weight: bold;
+}
+
+.liveFlight.topBorder {
+    border-top: solid 1px;
+    border-top-color: #E5E5E5;
+}
+
+.liveFlightReceived {
+    font-weight: normal;
+    font-size: 12.5px;
+}
+
+.centreText {
+    text-align:center;
+}
+
+.liveFlightBtns {
+    position:relative;
+    min-height:120px
+}
+
+.flightArrRfrsh {
+    position:absolute;
+    right:0px;
+    top:38px;
+}
+
+.flightDepRfrsh {
+    position:absolute;
+    right:0px;
+    top:38px;
+}
+
+/* Tide Times Table */
+.tidetimesTable {
+    border: thin solid gray;
+    border-spacing: 2px;
+    border-collapse: collapse;
+    background-color: white;
+    font-family: Arial;
+    font-size: 13px;
+    font-weight: normal;
+}
+
+.tidetimesTable td {
+    border: thin none gray;
+    padding: 3px 4px 3px 4px;
+    text-align: center;
+}
+
+.tidetimesTable td:first-child {
+    text-align: left;
+}
+
+.tidetimesTable td:last-child {
+    text-align: right;
+}
+
+.tideWeekday .tideLevel, .tideWeekday .tideHeight{
+    background-color: #EEEEEE;
+}
+
+.tideWeekend .tideLevel, .tideWeekend .tideHeight {
+    background-color: rgb(154, 189, 203);
+}
+
+.tideWeekend .tideDay, .tideWeekend .tideTime {
+    background-color: rgb(229, 245, 254);
+}
+
+tr.tidenextTide {
+    color: #B80006;
+    font-weight: bold;
+}
+
+.tidetimesTable td[rowspan] {
+  vertical-align: top;
+  text-align: left;
+}
+
+/* Jobs and Contacts Page */
+.jobLatestHeading, .contactHeading {
+    font-size: 13px;
+    font-family: Arial;
+}
+
+.jobLatestHeading strong, .contactHeading strong {
+    color: #b80006;
+}
+
+.busStopHeading {
+    color: #b80006;
+}
+
+.validationWarning {
+    color: red;
+}
+
+.jobLatestBlock {
+    border-bottom-color: #e0e0e0;
+    border-bottom-style: solid;
+    border-bottom-width: 1px;
+}
+
+.jobLatestBlock p, .contactBlock p {
+    font-family: Arial;
+    font-size: 13px;
+    font-weight: normal;
+    font-style: normal;
+}
+
+.jobDetailTable td, .jobDetailTable th, .contactDetailTable td, .contactDetailTable th {
+    text-align: left;
+    font-size: 13px;
+    padding-top: 2px;
+    vertical-align: top;
+}
+
+.jobDetailTable th {
+    padding-right: 1em;
+}
+
+.contactDetailTable th {
+    padding-right: 0.5em;
+}
+
+.contactDetailTable td, .contactDetailTable th {
+    padding-top: 1em;
+    padding-bottom: 1em;
+}
+
+.contactBlock .ui-btn-text 
+{
+    white-space: normal;
+}
+
+.coastalBlock {
+    font-family: Arial;
+    font-size: 14px;
+}
+
+.coastalTable td:first-child {
+    width: 6em;
+}
+
+.trafficReportCategory {
+    background-color: #EEEEEE;
+    font-weight: bold;
+    height: 3em;
+    padding-left: 1em;
+    padding-top: 1em;
+}
+
+.trafficReportHeading {
+    font-family: Arial;
+    color: #b80006;
+    font-weight: bold;
+    padding-bottom: 1em;
+    padding-top: 1em;
+    font-size: 13px;
+}
+
+.trafficReportTable td:first-child {
+    width: 8.5em;
+    font-weight: bold;
+    vertical-align: top;
+}
+
+.trafficReportBlock {
+    border-bottom-color: #e0e0e0;
+    border-bottom-style: solid;
+    border-bottom-width: 1px;
+    padding-bottom: 1em;
+    font-family: Arial;
+    font-size: 13px;
+}
+
+.trafficReportFuture {
+    background-color: #b80006;
+    font-weight: bold;
+    height: 3em;
+    padding-left: 1em;
+    padding-top: 1em;
+    color: #FFFFFF;
+    font-size: 18px;
 }
 
 
-@media only screen and (max-device-width: 480px) {
-  /* define mobile specific styles come here */
-     .leaflet-control-zoom { 
-        top: -14px;
-        margin-top: 9px !important;
-     }
+/* Remove border on the .ui-btn-inner of style B button */
+.ui-btn-up-b .ui-btn-inner {
+    border: none;
+}
 
-    .leaflet-control-zoom-out {
-        background-position-y: -24px !important;
-        background-position-x: 2px !important;
-    }
+.ui-btn-hover-b .ui-btn-inner {
+    border: none;
+}
 
-    .leaflet-control-zoom-in {
-        background-position-y: 2px !important;
-        background-position-x: 2px !important;
-    }
+.ui-btn-down-b .ui-btn-inner {
+    border: none;
+}
+
+/* Remove border on the .ui-btn-inner of style C button */
+.ui-btn-up-c .ui-btn-inner {
+    border: none;
+}
+
+.ui-btn-hover-c .ui-btn-inner {
+    border: none;
+}
+
+.ui-btn-down-c .ui-btn-inner {
+    border: none;
+}
+
+/* Remove border on the .ui-btn-inner of style D button */
+.ui-btn-up-d .ui-btn-inner {
+    border: none;
+}
+
+.ui-btn-hover-d .ui-btn-inner {
+    border: none;
+}
+
+.ui-btn-down-d .ui-btn-inner {
+    border: none;
+}
+
+.ui-header .ui-title {
+    min-height: 2em;
+    margin-top: 1.0em;
+    margin-bottom: 0.4em;
+}
+
+.ui-header .ui-btn-inner {
+    font-size:14px;
+    font-family: Arial;
+    padding-top: .5em;
+    padding-bottom: .55em;
+}
+
+.ui-btn-icon-left > .ui-btn-inner > .ui-icon {
+    margin-top: -15px;
+}
+
+.ui-header .ui-btn-icon-left .ui-btn-inner {
+    padding-left: 37px;
+}
 
 
+/* Login icon */
+.svg .ui-icon-sojlogin {
+    background:transparent; 
+    background-image: url(http://d1xr5wynv0xge6.cloudfront.net/govje/m/sprites3-30.png);
+    background-repeat: no-repeat;
+    background-size: 30px, 630px;
+    background-position: 0 -480px;
+    -moz-border-radius: 0px;
+    -webkit-border-radius:0px;
+    border-radius:0px;
+    box-shadow: none;
+    width: 30px;
+    height: 30px;
+}
+
+.nosvg .ui-icon-sojlogin {
+    background:transparent; 
+    background-image: url(http://d1xr5wynv0xge6.cloudfront.net/govje/m/sprites-30.png);
+    background-repeat: no-repeat;
+    background-position: -6px -324px;
+    -moz-border-radius: 0px;
+    -webkit-border-radius:0px;
+    border-radius:0px;
+    box-shadow: none;
+    width: 11px;
+    height: 14px;
+}
+
+.ui-header [data-icon="sojlogin"] {
+    display: none;
+}
+
+
+/* Overriding general font Sizes */
+.ui-btn-inner {
+    font-size: 14px;
+}
+
+.ui-header .ui-title, .ui-footer .ui-title {
+    font-size: 14px;
+}
+
+/* Styling for Large navigation menu icons */
+.navHomeMenu .ui-li .ui-btn-inner a.ui-link-inherit {
+    padding-left: 50px;
+}
+
+.navsprite {
+    margin-right: 10px;
+    position: absolute;
+    left: 10px;
+    top: 50%;
+    margin-top: -15px;
+    max-height: 30px;
+    max-width: 30px;
+    float: left;
+}
+
+.navrow {
+    min-height:2.5em;
+    height:auto;
+    height:2.5em;
+    display: table;
+}
+
+.navrow p {
+ display: table-cell; 
+  vertical-align: middle; 
+  white-space: normal;
+  font-weight: bold;
+  font-size: 14px;
+}
+
+
+
+
+/* Sprites */
+.svg .sprite-BOAT, .svg .sprite-COMPUTER, .svg .sprite-CONTACT, .svg .sprite-HAND, .svg .sprite-PLANE, .svg .sprite-WEATHER, .svg .sprite-LIONS, .svg .sprite-PADLOCK, .svg .sprite-TRAFFIC, .svg .sprite-EATSAFE, .svg .sprite-BUS {
+    background-image:url(http://d1xr5wynv0xge6.cloudfront.net/govje/m/sprites3.svg);
+    background-size: 30px, 630px;
+    background-repeat: no-repeat;
+}
+
+.nosvg .sprite-BOAT, .nosvg .sprite-COMPUTER, .nosvg .sprite-CONTACT, .nosvg .sprite-HAND, .nosvg .sprite-PLANE, .nosvg .sprite-WEATHER, .nosvg .sprite-LIONS, .nosvg .sprite-PADLOCK, .nosvg .sprite-TRAFFIC, .nosvg .sprite-EATSAFE, .nosvg .sprite-BUS {
+	background-image: url(http://d1xr5wynv0xge6.cloudfront.net/govje/m/sprites3-30.png);
+    background-repeat: no-repeat;
+}
+
+.svg .sprite-BOAT{ background-position: 0 -180px; width: 30px; height: 30px; } 
+.svg .sprite-COMPUTER{ background-position: 0 -60px; width: 30px; height: 30px; } 
+.svg .sprite-CONTACT{ background-position: 0 -300px; width: 30px; height: 30px; } 
+.svg .sprite-HAND{ background-position: 0 0; width: 30px; height: 30px; } 
+.svg .sprite-PLANE{ background-position: 0 -120px; width: 30px; height: 30px; } 
+.svg .sprite-WEATHER{ background-position: 0 -240px; width: 30px; height: 30px; } 
+.svg .sprite-LIONS{ background-position: 0 -420px; width: 30px; height: 30px; } 
+.svg .sprite-PADLOCK{ background-position: 0 -480px; width: 30px; height: 30px; } 
+.svg .sprite-TRAFFIC{ background-position: 0 -360px; width: 30px; height: 30px; } 
+.svg .sprite-EATSAFE{ background-position: 0 -540px; width: 30px; height: 30px; } 
+.svg .sprite-BUS{ background-position: 0 -600px; width: 30px; height: 30px; } 
+
+.nosvg .sprite-BOAT{ background-position: -6px -5px; width: 30px; height: 30px; } 
+.nosvg .sprite-COMPUTER{ background-position: -6px -45px; width: 30px; height: 30px; } 
+.nosvg .sprite-CONTACT{ background-position: -6px -85px; width: 30px; height: 30px; } 
+.nosvg .sprite-HAND{ background-position: -6px -125px; width: 30px; height: 30px; } 
+.nosvg .sprite-PLANE{ background-position: -6px -165px; width: 30px; height: 30px; }
+.nosvg .sprite-TRAFFIC{ background-position: -6px -205px; width: 30px; height: 30px; }
+.nosvg .sprite-WEATHER{ background-position: -6px -245px; width: 30px; height: 30px; } 
+.nosvg .sprite-LIONS{ background-position: -6px -285px; width: 25px; height: 29px; } 
+.nosvg .sprite-PADLOCK{ background-position: -6px -324px; width: 11px; height: 14px; } 
+.nosvg .sprite-EATSAFE{ background-position: -6px -348px; width: 30px; height: 30px; } 
+.nosvg .sprite-BUS{ background-position: -6px -388px; width: 30px; height: 30px; } 
+
+.svg .sojicon {
+    background-image: url(http://d1xr5wynv0xge6.cloudfront.net/govje/m/sprites3.svg);
+    background-repeat: no-repeat;
+    background-size: 36px, 612px;
+    background-position: 0 -504px;
+    width: 36px;
+    height: 36px;
+    max-height: 36px;
+    max-width: 36px;
+    margin-top: -4px;
+    position: absolute;
+}
+
+.nosvg .sojicon {
+    background-image: url(http://d1xr5wynv0xge6.cloudfront.net/govje/m/sprites3-30.png);
+    background-repeat: no-repeat;
+    background-position: -6px -285px;
+    width: 25px;
+    height: 29px;
+    max-height: 30px;
+    max-width: 30px;
+    margin-top: 2px;
+    position: absolute;
+}
+
+.sojiconandtext {
+    margin: -10px auto -10px auto;
+    position: relative;
+    width: 8em;
+}
+
+.svg .sojiconandtext p {
+    padding-left: 2.5em;
+    font-size:14px;
+    font-family: Arial;
+}
+
+.nosvg .sojiconandtext p {
+    padding-left: 2.0em;
+    font-size:14px;
+    font-family: Arial;
+}
+
+.liveCarParkingReceived {
+    font-weight: normal;
+    font-size: 12.5px;
+}
+
+.liveCarParkingBtns {
+    position:relative;
+    min-height:120px
+}
+
+.liveCarParkingRfrsh {
+    position:absolute;
+    right:0px;
+    top:38px;
 }

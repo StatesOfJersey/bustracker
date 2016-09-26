@@ -3,16 +3,6 @@
     ViewBag.Title = "Index";
 }
 
-<script src="http://d3js.org/d3.v3.min.js" type="text/javascript"></script>
-<link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.css" />
-<script src="http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.js"></script>
-<link href="https://api.tiles.mapbox.com/mapbox.js/v1.6.4/mapbox.css" rel="stylesheet" />
-<script src="https://api.tiles.mapbox.com/mapbox.js/v1.6.4/mapbox.js"></script>
-
-    <script src="~/Content/scripts/Index.js?version=1.4.1"></script>
-    <script src="~/Content/scripts/MenuClass.js?version=1.4.2"></script>
-    <script src="~/Content/scripts/BusClass.js?version=1.4.1"></script>
-<script src="~/Content/scripts/c5.js"></script>
 
 
 
@@ -181,7 +171,7 @@
             var prom = getBusRoutes();
             $.when(prom).then(function (buses) {
                 localStorage.setItem('busRoutes', JSON.stringify(buses));
-                drawRoute(buses);
+                drawRoutes(buses);
             });
         });
 
@@ -203,7 +193,7 @@
                 // STOP //
             } else {
                 svg.selectAll('.busItem').remove();
-                getData(0, false);
+                getBusLocationData(0, false);
             }
         }
         document.addEventListener("visibilitychange", handleVisibilityChange, false);

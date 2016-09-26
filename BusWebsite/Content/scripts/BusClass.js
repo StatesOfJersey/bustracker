@@ -64,14 +64,14 @@ function drawBus(busData, duration) {
                 return "11px";
             }))
             .style('fill', (function (d) {
-                return getBusTextColors(d["line"]);
+                return getBusTextColourHex(d["line"], routes);
             }))
             .text(function (d) { return d.line; });
 
         // Update text when bus changes line e.g 5 becomes 7
         points.select('text')
                .style('fill', (function (d) {
-                   return getBusTextColors(d["line"]);
+                   return getBusTextColourHex(d["line"], routes);
                }))
                .text(function (d) { return d.line; });
 
@@ -136,7 +136,7 @@ function drawStop(stopData) {
 }
 
 
-function drawRoute(routedata) {
+function drawRoutes(routedata) {
 
     var routes = svg.selectAll('.route');
     routes.remove(); //Clear existing
@@ -160,7 +160,6 @@ function drawRoute(routedata) {
 
     var routes = routedata["routes"];
     var routeColour;
-    var lastRouteNumber;
     var lineStyle;
 
 
@@ -169,11 +168,8 @@ function drawRoute(routedata) {
         routeColour = route["Colour"];
 
 
-        if (route["direction"] == "I")
-            console.log("inbound route found");
-        
         if (route["RouteCoordinates"] != null && getRouteVisibility(route) === 'visible') {
-            var lastSection;
+            var lastSection = '';
             var sectionBoundaries = [0];
 
             for (var j = 0; j < route["RouteCoordinates"].length; j++) {
@@ -181,7 +177,7 @@ function drawRoute(routedata) {
 
                 if (coordinateItem["splitSection"] != null && lastSection != coordinateItem["splitSection"]) {
                     lastSection = coordinateItem["splitSection"];
-                    sectionBoundaries.push([j]);
+                    sectionBoundaries.push(j);
                 }
             }
             
@@ -516,15 +512,18 @@ function getBusColourHex(lineNumber, busRoutes) {
     return "#0000FF"; //Return blue
 }
 
-//Hack: how do we do this? need some rules or foreground from API | Change Text color for light backgrounds
-function getBusTextColors(d) {
-
-    if (d === "23" || d === "5" || d === "1A" || d === "1GO" || d === "12A") {
-        return d3.rgb(59, 63, 65);
-    } else {
-        return "white";
+function getBusTextColourHex(lineNumber, busRoutes) {
+    var routes = busRoutes["routes"];
+    // iterate over each element in the array
+    for (var i = 0; i < routes.length; i++) {
+        // look for the entry with a matching `code` value
+        if (routes[i].Number === lineNumber) {
+            return routes[i].ColourInverse;
+        }
     }
+    return "#FFFFFF"; //Return white
 }
+
 
 
 
@@ -537,29 +536,29 @@ function getBusOpacity(d) {
 }
 
 function getRouteVisibility(busRoute) {
-    var selected = getSelectionData().split(',');
+    var selected = getUserPreferencesForRoutesFromStorageOrCheckboxes().split(',');
     if (selected.indexOf(busRoute["Number"]) === -1) {
-        return "hidden";
-    } else {
         return "visible";
+    } else {
+        return "hidden";
     }
 }
 
 function getBusVisibility(bus) {
-    var selected = getSelectionData().split(',');
+    var selected = getUserPreferencesForRoutesFromStorageOrCheckboxes().split(',');
 
     if (bus.cat === "School Bus") {
         if (selected.indexOf("school") === -1) {
-            return "hidden";
-        } else {
             return "visible";
+        } else {
+            return "hidden";
         }
     }
 
     if (selected.indexOf(bus.line) === -1) {
-        return "hidden";
-    } else {
         return "visible";
+    } else {
+        return "hidden";
     }
 }
 
