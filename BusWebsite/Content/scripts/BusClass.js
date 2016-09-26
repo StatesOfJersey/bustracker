@@ -144,8 +144,7 @@ function drawRoutes(routedata) {
         return;
     }
 
-    var mode = (zoom > 14)? "linear" : "basis";
-    var zoom = map.getZoom();
+    var mode = (map.getZoom() > 14)? "linear" : "basis";
 
 
     var lineFunction = d3.svg.line()
