@@ -288,7 +288,7 @@ function loadBusStopRadius() {
     } else if (stopRadius == 5000) {
         stopRadiusVal.attr("value", "4");
         d3.select("#stopRadiusValLabel").html("5000 metres");
-    } else if (stopRadius == 10000) {
+    } else if (stopRadius == 30000) {
         stopRadiusVal.attr("value", "5");
         d3.select("#stopRadiusValLabel").html("All stops");
     }
@@ -320,7 +320,7 @@ function changeStopRadius(intValue) {
             labelStr = "5000 metres";
             break;
         case "5":
-            stopRadiusHasChanged = 10000;
+            stopRadiusHasChanged = 30000;
             labelStr = "All stops";
             break;
     }
