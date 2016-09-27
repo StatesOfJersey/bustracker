@@ -542,13 +542,13 @@ tr.tidenextTide {
 
 /* Sprites */
 .svg .sprite-BOAT, .svg .sprite-COMPUTER, .svg .sprite-CONTACT, .svg .sprite-HAND, .svg .sprite-PLANE, .svg .sprite-WEATHER, .svg .sprite-LIONS, .svg .sprite-PADLOCK, .svg .sprite-TRAFFIC, .svg .sprite-EATSAFE, .svg .sprite-BUS {
-    background-image:url(http://d1xr5wynv0xge6.cloudfront.net/govje/m/sprites3.svg);
+    background-image:url(https://d1xr5wynv0xge6.cloudfront.net/govje/m/sprites3.svg);
     background-size: 30px, 630px;
     background-repeat: no-repeat;
 }
 
 .nosvg .sprite-BOAT, .nosvg .sprite-COMPUTER, .nosvg .sprite-CONTACT, .nosvg .sprite-HAND, .nosvg .sprite-PLANE, .nosvg .sprite-WEATHER, .nosvg .sprite-LIONS, .nosvg .sprite-PADLOCK, .nosvg .sprite-TRAFFIC, .nosvg .sprite-EATSAFE, .nosvg .sprite-BUS {
-	background-image: url(http://d1xr5wynv0xge6.cloudfront.net/govje/m/sprites3-30.png);
+	background-image: url(https://d1xr5wynv0xge6.cloudfront.net/govje/m/sprites3-30.png);
     background-repeat: no-repeat;
 }
 
@@ -577,7 +577,7 @@ tr.tidenextTide {
 .nosvg .sprite-BUS{ background-position: -6px -388px; width: 30px; height: 30px; } 
 
 .svg .sojicon {
-    background-image: url(http://d1xr5wynv0xge6.cloudfront.net/govje/m/sprites3.svg);
+    background-image: url(https://d1xr5wynv0xge6.cloudfront.net/govje/m/sprites3.svg);
     background-repeat: no-repeat;
     background-size: 36px, 612px;
     background-position: 0 -504px;
@@ -590,7 +590,7 @@ tr.tidenextTide {
 }
 
 .nosvg .sojicon {
-    background-image: url(http://d1xr5wynv0xge6.cloudfront.net/govje/m/sprites3-30.png);
+    background-image: url(https://d1xr5wynv0xge6.cloudfront.net/govje/m/sprites3-30.png);
     background-repeat: no-repeat;
     background-position: -6px -285px;
     width: 25px;

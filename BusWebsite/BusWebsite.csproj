@@ -123,6 +123,7 @@
     <Content Include="Content\jquery.mobile.theme-1.2.0.css" />
     <Content Include="Content\jquery.mobile.theme-1.2.0.min.css" />
     <Content Include="Content\scripts\BusClass.js" />
+    <Content Include="Content\scripts\busLiveDepartures.js" />
     <Content Include="Content\scripts\c5.js" />
     <Content Include="Content\scripts\MenuClass.js" />
     <Content Include="Content\Site.css" />

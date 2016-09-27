@@ -120,9 +120,9 @@ function getBusRoutes() {
     }
     else {
         //ToDo: swap back to azure
-        //"http://uat-sojbuslivetimespublic.azurewebsites.net/api/Values/GetRoutes"
+        //"https://sojbuslivetimespublic.azurewebsites.net/api/Values/GetRoutes"
         //http://localhost:55421/api/Values/GetRoutes
-        d3.json("http://uat-sojbuslivetimespublic.azurewebsites.net/api/Values/GetRoutes", function (error, data) {
+        d3.json("https://uat-sojbuslivetimespublic.azurewebsites.net/api/Values/GetRoutes", function (error, data) {
             if (!error) {
                 deferred.resolve(data);
             }
@@ -150,7 +150,7 @@ function getBusLocationData(duration, reloadData) {
                 showPrivacyError();
             }
         }
-        d3.json("http://uat-sojbuslivetimespublic.azurewebsites.net/api/Values/GetMin?secondsAgo=3600" + locationParam, function (error, data) {
+        d3.json("https://uat-sojbuslivetimespublic.azurewebsites.net/api/Values/GetMin?secondsAgo=3600" + locationParam, function (error, data) {
             if (!error) {
                 drawData(data, duration);
                 cachedData = data;

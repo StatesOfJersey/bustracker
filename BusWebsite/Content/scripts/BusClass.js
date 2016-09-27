@@ -403,8 +403,8 @@ function stopClicked(d) {
         popup.append("h4")
             .attr("class", "loadingMessage")
             .text("Loading...");
-        //http://sojbuslivetimespublic.azurewebsites.net/api/Values/BusStop/
-        d3.json("http://uat-sojbuslivetimespublic.azurewebsites.net//api/Values/BusStop/" + d["StopNumber"], function (data) {
+        //https://sojbuslivetimespublic.azurewebsites.net/api/Values/BusStop/
+        d3.json("https://uat-sojbuslivetimespublic.azurewebsites.net//api/Values/BusStop/" + d["StopNumber"], function (data) {
             drawEtaTable(popup, data);
             d3.select(".loadingMessage").remove();
         });

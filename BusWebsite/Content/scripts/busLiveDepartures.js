@@ -150,7 +150,7 @@ function getDurationUntilTime(time) {
 //Todo: Swap to live
 function getLiveDepartureTimes(busStop) {
     var defer = $.Deferred();
-    d3.json("http://uat-sojbuslivetimespublic.azurewebsites.net/api/Values/BusStop/" + busStop, function (error, data) {
+    d3.json("https://uat-sojbuslivetimespublic.azurewebsites.net/api/Values/BusStop/" + busStop, function (error, data) {
         if (!error) {
             data.sort(function (a, b) {
                 return new Date(a.ETA) - new Date(b.ETA);
