@@ -39,6 +39,7 @@ namespace Tracking_API.Controllers
         private const int BUS_CACHE_TIMESPAN_SECONDS = 1200; //1200 = 20 minutes
         private const int ROUTE_CACHE_TIMESPAN_SECONDS = 43200;
         private const int STOP_CACHE_TIMESPAN_SECONDS = 43200; //43200s = 12 hour cache since bus stops do not change that often
+        private const int STOP_ETA_CACHE_TIMESPAN_SECONDS = 5; //we don't want to cache this very much at all but we do want to prevent a denial of service attack on the underlying data source
 
         #region v1 feed provided for stability for app developers to rely on an exact feed version
         /// <summary>
@@ -108,16 +109,24 @@ namespace Tracking_API.Controllers
         [Route("api/Values/BusStop/{id:int}")]
         public HttpResponseMessage BusStop(int id)
         {
-            WebClient wc = new WebClient();
-            byte[] raw = wc.DownloadData("http://jersey.connect.vixtechnology.com/Text/WebDisplay.aspx?stopRef=" + id.ToString());
 
-            string webData = System.Text.Encoding.UTF8.GetString(raw);
+            MemoryCache mc = MemoryCache.Default;
+            var busETAs = mc[StopInformationkey(id)] as List<BusETA>;
+            if (busETAs == null)
+            {
+                WebClient wc = new WebClient();
+                byte[] raw = wc.DownloadData("http://jersey.connect.vixtechnology.com/Text/WebDisplay.aspx?stopRef=" + id.ToString());
 
-            // var gmtZone = TimeZoneInfo.FindSystemTimeZoneById("GMT Standard Time");
-            // var gmtDateTime = TimeZoneInfo.ConvertTime(DateTime.Now, TimeZoneInfo.Local, gmtZone).AddHours(-1);
-            var results = BusETA.ConvertVixXhtmlToBusETAs(webData, DateTime.Now, id);
+                string webData = System.Text.Encoding.UTF8.GetString(raw);
 
-            return Request.CreateResponse(HttpStatusCode.OK, results);
+                // var gmtZone = TimeZoneInfo.FindSystemTimeZoneById("GMT Standard Time");
+                // var gmtDateTime = TimeZoneInfo.ConvertTime(DateTime.Now, TimeZoneInfo.Local, gmtZone).AddHours(-1);
+                busETAs = BusETA.ConvertVixXhtmlToBusETAs(webData, DateTime.Now, id);
+
+                mc.Add(StopInformationkey(id), busETAs, DateTimeOffset.UtcNow.AddSeconds(STOP_ETA_CACHE_TIMESPAN_SECONDS));
+            }
+
+            return Request.CreateResponse(HttpStatusCode.OK, busETAs);
         }
 
         /// <summary>
@@ -364,6 +373,10 @@ namespace Tracking_API.Controllers
         private string Routeskey()
         {
             return "routes";
+        }
+        private string StopInformationkey(int id)
+        {
+            return string.Format("stopNumber-{0}", id);
         }
         private string LastUpdatekey()
         {
