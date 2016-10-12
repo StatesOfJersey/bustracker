@@ -53,8 +53,9 @@ namespace Tracking_Common
                         }
                         else if (columns[4].Value.Contains(":"))
                         {
+
                             busETA.ETA =
-                                DateTime.Parse(referenceTime.ToString("yyyy/MM/dd ") + columns[4].Value + "+01:00");
+                                DateTime.Parse(referenceTime.ToString("yyyy/MM/dd ") + columns[4].Value + ((TimeZoneInfo.Local.IsDaylightSavingTime(referenceTime)) ? "+01:00" : ""));  
                             busETA.IsTracked = false;
                         }
                         else
