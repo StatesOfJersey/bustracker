@@ -433,7 +433,7 @@ if(!auditUsage)
 
             Assert.AreEqual(result[0].ETA, time);
             Assert.AreEqual(result[1].ETA, time.AddMinutes(64));
-            Assert.AreEqual(result[2].ETA,(new DateTime(2016, 07, 21, 16, 31, 0).ToUniversalTime()));
+            Assert.AreEqual(result[2].ETA,(new DateTime(2016, 07, 21, 14, 31, 0).ToUniversalTime()));
         }
 
         [TestMethod]
