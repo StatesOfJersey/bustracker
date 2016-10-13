@@ -393,14 +393,14 @@ if(!auditUsage)
 
             //A date which is in the summer
             var summerTimes = BusETA.ConvertVixXhtmlToBusETAs(standardXhtml, DateTime.Parse("2015/08/01 12:00"), 1234);
-            Assert.AreEqual("2015/08/01 12:00:00", summerTimes[0].ETA.ToString("yyyy/MM/dd HH:mm:ss"));
-            Assert.AreEqual("2015/08/01 19:21:00", summerTimes[1].ETA.ToString("yyyy/MM/dd HH:mm:ss"));
+            Assert.AreEqual("2015/08/01 11:00:00", summerTimes[0].ETA.ToUniversalTime().ToString("yyyy/MM/dd HH:mm:ss"));
+            Assert.AreEqual("2015/08/01 18:21:00", summerTimes[1].ETA.ToUniversalTime().ToString("yyyy/MM/dd HH:mm:ss"));
             Assert.AreEqual(DateTimeKind.Local, summerTimes[1].ETA.Kind);
 
             //A date which is in the winter
             var winterTimes = BusETA.ConvertVixXhtmlToBusETAs(standardXhtml, DateTime.Parse("2015/12/01 12:00"), 1234);
-            Assert.AreEqual("2015/12/01 12:00:00", winterTimes[0].ETA.ToString("yyyy/MM/dd HH:mm:ss"));
-            Assert.AreEqual("2015/12/01 19:21:00", winterTimes[1].ETA.ToString("yyyy/MM/dd HH:mm:ss"));
+            Assert.AreEqual("2015/12/01 12:00:00", winterTimes[0].ETA.ToUniversalTime().ToString("yyyy/MM/dd HH:mm:ss"));
+            Assert.AreEqual("2015/12/01 19:21:00", winterTimes[1].ETA.ToUniversalTime().ToString("yyyy/MM/dd HH:mm:ss"));
             Assert.AreEqual(DateTimeKind.Unspecified, winterTimes[1].ETA.Kind);
             
             //these two dates are different and they are sent as json in the correct format later on
@@ -433,7 +433,7 @@ if(!auditUsage)
 
             Assert.AreEqual(result[0].ETA, time);
             Assert.AreEqual(result[1].ETA, time.AddMinutes(64));
-            Assert.AreEqual(result[2].ETA,(new DateTime(2016, 07, 21, 15, 31, 0)));
+            Assert.AreEqual(result[2].ETA,(new DateTime(2016, 07, 21, 16, 31, 0).ToUniversalTime()));
         }
 
         [TestMethod]
