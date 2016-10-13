@@ -393,8 +393,8 @@ if(!auditUsage)
 
             //A date which is in the summer
             var summerTimes = BusETA.ConvertVixXhtmlToBusETAs(standardXhtml, DateTime.Parse("2015/08/01 12:00"), 1234);
-            Assert.AreEqual("2015/08/01 11:00:00", summerTimes[0].ETA.ToUniversalTime().ToString("yyyy/MM/dd HH:mm:ss"));
-            Assert.AreEqual("2015/08/01 18:21:00", summerTimes[1].ETA.ToUniversalTime().ToString("yyyy/MM/dd HH:mm:ss"));
+            Assert.AreEqual("2015/08/01 12:00:00", summerTimes[0].ETA.ToUniversalTime().ToString("yyyy/MM/dd HH:mm:ss"));
+            Assert.AreEqual("2015/08/01 19:21:00", summerTimes[1].ETA.ToUniversalTime().ToString("yyyy/MM/dd HH:mm:ss"));
             Assert.AreEqual(DateTimeKind.Local, summerTimes[1].ETA.Kind);
 
             //A date which is in the winter
