@@ -63,7 +63,11 @@ namespace Tracking_Receiver.Controllers
                 else
                 {
                     //Bus location update so convert it to an AssetLocationUpdate and send on
-                    var senderTopicClient = TopicClient.CreateFromConnectionString(CloudConfigurationManager.GetSetting("MessageBus.ConnectionString"), CloudConfigurationManager.GetSetting("MessageBus.Topic"));
+
+                    bool messageBusEnabled = bool.Parse(CloudConfigurationManager.GetSetting("MessageBus.Enabled"));
+                    TopicClient senderTopicClient = null;
+                    if (messageBusEnabled)
+                        senderTopicClient = TopicClient.CreateFromConnectionString(CloudConfigurationManager.GetSetting("MessageBus.ConnectionString"), CloudConfigurationManager.GetSetting("MessageBus.Topic"));
 
                     List<AssetLocationUpdate> assetLocationUpdates = comms.ConvertToSiriMessageToAssetLocationUpdates(xmlDocument, int.Parse(CloudConfigurationManager.GetSetting("CutOffForSchoolBusNumbers")), CloudConfigurationManager.GetSetting("Ticketer.SubscriptionIdentifier"));
                     foreach (var update in assetLocationUpdates)
@@ -88,15 +92,16 @@ namespace Tracking_Receiver.Controllers
                         try
                         {
                             var busData = JsonConvert.SerializeObject(eventData);
-
-                            senderTopicClient.Send(new BrokeredMessage(busData));
+                            if (senderTopicClient != null)
+                                senderTopicClient.Send(new BrokeredMessage(busData));
                         }
                         catch (Exception ex)
                         { //no nothing
                         }
 
                     }
-                    senderTopicClient.Close();
+                    if (senderTopicClient != null)
+                        senderTopicClient.Close();
 
 
                     try

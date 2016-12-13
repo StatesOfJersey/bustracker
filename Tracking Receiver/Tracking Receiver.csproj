@@ -240,6 +240,7 @@
     <Content Include="Areas\HelpPage\Views\Help\Api.cshtml" />
     <Content Include="ApplicationInsights.config" />
     <None Include="Properties\PublishProfiles\sojbuslivetimessubscriber.pubxml" />
+    <None Include="Properties\PublishProfiles\uat-sojbuslivetimessubscriber - Web Deploy.pubxml" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
