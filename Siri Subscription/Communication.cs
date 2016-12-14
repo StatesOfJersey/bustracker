@@ -22,7 +22,7 @@ namespace Siri_Subscription
 
         }
 
-        public Tuple<bool, XDocument> SubscribeToService(string requestorRef, string replyAddress, string subscriptionIdentifier, string updateInterval, string urlForTicketer, string ticketerLogin, string ticketerPassword)
+        public Tuple<bool, XDocument> SubscribeToStopMonitoringService(string requestorRef, string replyAddress, string subscriptionIdentifier, string updateInterval, string urlForTicketer, string ticketerLogin, string ticketerPassword, int stopCode)
         {
             return CallWebService(
 string.Format(@"<Siri xmlns=""http://www.siri.org.uk/siri"" xmlns:xsi=""http://www.w3.org/2001/XMLSchema-instance"" xsi:schemaLocation=""http://www.kizoom.com/standards/siri/schema/1.3/siri.xsd"" version=""1.3"">
@@ -31,7 +31,42 @@ string.Format(@"<Siri xmlns=""http://www.siri.org.uk/siri"" xmlns:xsi=""http://w
     <RequestorRef>{4}</RequestorRef>
     <ConsumerAddress>{5}</ConsumerAddress>
     <SubscriptionContext>
-      <HeartbeatInterval>PT60S</HeartbeatInterval>
+      <HeartbeatInterval>PT5M</HeartbeatInterval>
+    </SubscriptionContext>
+    <StopMonitoringSubscriptionRequest>
+      <SubscriptionIdentifier>{6}{8}</SubscriptionIdentifier>
+      <InitialTerminationTime>{2}T{3}+00:00</InitialTerminationTime>
+      <StopMonitoringRequest version=""1.3"">
+        <RequestTimestamp>{0}T{1}+00:00</RequestTimestamp>
+        <PreviewInterval>PT60M</PreviewInterval>
+        <MonitoringRef>{8}</MonitoringRef>
+        <MinimumStopVisitsPerLine>1</MinimumStopVisitsPerLine>
+      </StopMonitoringRequest>
+      <IncrementalUpdates>true</IncrementalUpdates>
+      <ChangeBeforeUpdates>{7}</ChangeBeforeUpdates>
+    </StopMonitoringSubscriptionRequest>
+  </SubscriptionRequest>
+</Siri>", DateTime.UtcNow.ToString("yyyy-MM-dd"),
+          DateTime.UtcNow.ToString("HH:mm:ss"),
+          DateTime.UtcNow.AddDays(7).ToString("yyyy-MM-dd"),
+          DateTime.UtcNow.ToString("HH:mm:ss"),
+          requestorRef,
+          replyAddress,
+          subscriptionIdentifier,
+          updateInterval,
+          stopCode), urlForTicketer, ticketerLogin, ticketerPassword);
+        }
+
+        public Tuple<bool, XDocument> SubscribeToVehicleMonitoringService(string requestorRef, string replyAddress, string subscriptionIdentifier, string updateInterval, string urlForTicketer, string ticketerLogin, string ticketerPassword)
+        {
+            return CallWebService(
+string.Format(@"<Siri xmlns=""http://www.siri.org.uk/siri"" xmlns:xsi=""http://www.w3.org/2001/XMLSchema-instance"" xsi:schemaLocation=""http://www.kizoom.com/standards/siri/schema/1.3/siri.xsd"" version=""1.3"">
+  <SubscriptionRequest>
+    <RequestTimestamp>{0}T{1}+00:00</RequestTimestamp>
+    <RequestorRef>{4}</RequestorRef>
+    <ConsumerAddress>{5}</ConsumerAddress>
+    <SubscriptionContext>
+      <HeartbeatInterval>PT5M</HeartbeatInterval>
     </SubscriptionContext>
     <VehicleMonitoringSubscriptionRequest>
       <SubscriptionIdentifier>{6}</SubscriptionIdentifier>

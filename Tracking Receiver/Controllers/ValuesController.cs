@@ -60,7 +60,13 @@ namespace Tracking_Receiver.Controllers
                 {
                     //do nothing it's a heartbeat from Siri
                 }
-                else
+                else if (xmlFromSiri.IndexOf("StopMonitoringDelivery") > 0)
+                {
+                    //chuck the data in redis cache for now
+                    IDatabase cache = RedisConnection.GetDatabase();
+                    cache.StringSet("stopdata:", xmlDocument.ToString());
+                }
+                else if (xmlFromSiri.IndexOf("VehicleMonitoringDelivery") > 0)
                 {
                     //Bus location update so convert it to an AssetLocationUpdate and send on
 
@@ -129,7 +135,7 @@ namespace Tracking_Receiver.Controllers
             {
                 using (Communication comms = new Communication())
                 {
-                    var result = comms.SubscribeToService(
+                    var result = comms.SubscribeToVehicleMonitoringService(
                         CloudConfigurationManager.GetSetting("Ticketer.RequestorRef"),
                         CloudConfigurationManager.GetSetting("Ticketer.ReplyAddress"),
                         CloudConfigurationManager.GetSetting("Ticketer.SubscriptionIdentifier"),
@@ -137,11 +143,26 @@ namespace Tracking_Receiver.Controllers
                         CloudConfigurationManager.GetSetting("Ticketer.Url"),
                         CloudConfigurationManager.GetSetting("Ticketer.Login"),
                         CloudConfigurationManager.GetSetting("Ticketer.Password"));
-                    if (result.Item1)//success
+                    if (result.Item1)
                     {
                         sendSubscriptionInformationToSqlAzure(result);
                         SiriSubscriptionDate = DateTime.UtcNow;
                     }
+
+                    result = comms.SubscribeToStopMonitoringService(
+                        CloudConfigurationManager.GetSetting("Ticketer.RequestorRef"),
+                        CloudConfigurationManager.GetSetting("Ticketer.ReplyAddress"),
+                        CloudConfigurationManager.GetSetting("Ticketer.SubscriptionIdentifier"),
+                        CloudConfigurationManager.GetSetting("Ticketer.UpdateInterval"),
+                        CloudConfigurationManager.GetSetting("Ticketer.Url"),
+                        CloudConfigurationManager.GetSetting("Ticketer.Login"),
+                        CloudConfigurationManager.GetSetting("Ticketer.Password"),
+                        2326); //airport for starters
+                    if (result.Item1)
+                    {
+                        sendSubscriptionInformationToSqlAzure(result);
+                    }
+                    
                 }
             }
         }
