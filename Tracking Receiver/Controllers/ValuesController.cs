@@ -64,11 +64,14 @@ namespace Tracking_Receiver.Controllers
                 {
                     //chuck the data in redis cache for now
                     IDatabase cache = RedisConnection.GetDatabase();
-                    cache.StringSet("stopdata:", xmlDocument.ToString());
+                    cache.StringSet("stopdata:xyz", xmlDocument.ToString());
                 }
                 else if (xmlFromSiri.IndexOf("VehicleMonitoringDelivery") > 0)
                 {
                     //Bus location update so convert it to an AssetLocationUpdate and send on
+
+                    IDatabase tempcache = RedisConnection.GetDatabase();
+                    tempcache.StringSet("rawbusdata:xyz", xmlDocument.ToString());
 
                     bool messageBusEnabled = bool.Parse(CloudConfigurationManager.GetSetting("MessageBus.Enabled"));
                     TopicClient senderTopicClient = null;
@@ -124,6 +127,12 @@ namespace Tracking_Receiver.Controllers
                         //do nothing
                     }
                 }
+                else
+                {
+                    //chuck the data in redis cache for now
+                    IDatabase cache = RedisConnection.GetDatabase();
+                    cache.StringSet("unknown:xyz", xmlDocument.ToString());
+                }
             }
             CheckAndSubscribeToSiriIfNecessary();
             return new HttpResponseMessage(HttpStatusCode.OK);
@@ -148,6 +157,7 @@ namespace Tracking_Receiver.Controllers
                         sendSubscriptionInformationToSqlAzure(result);
                         SiriSubscriptionDate = DateTime.UtcNow;
                     }
+                  
 
                     result = comms.SubscribeToStopMonitoringService(
                         CloudConfigurationManager.GetSetting("Ticketer.RequestorRef"),
@@ -157,12 +167,18 @@ namespace Tracking_Receiver.Controllers
                         CloudConfigurationManager.GetSetting("Ticketer.Url"),
                         CloudConfigurationManager.GetSetting("Ticketer.Login"),
                         CloudConfigurationManager.GetSetting("Ticketer.Password"),
-                        2326); //airport for starters
+                        4524); //Stand B
                     if (result.Item1)
                     {
                         sendSubscriptionInformationToSqlAzure(result);
                     }
-                    
+                    else
+                    {
+
+                        IDatabase cache = RedisConnection.GetDatabase();
+                        cache.StringSet("error:theError", result.Item2.ToString());
+                    }
+
                 }
             }
         }
