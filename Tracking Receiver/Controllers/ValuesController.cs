@@ -134,9 +134,9 @@ namespace Tracking_Receiver.Controllers
                         CloudConfigurationManager.GetSetting("Ticketer.Password"));
                     if (result.Item1)//success
                     {
-                        sendSubscriptionInformationToSqlAzure(result);
                         SiriSubscriptionDate = DateTime.UtcNow;
                     }
+                    sendSubscriptionInformationToSqlAzure(result);
                 }
             }
         }
