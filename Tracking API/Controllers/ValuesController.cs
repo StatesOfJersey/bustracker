@@ -134,7 +134,7 @@ namespace Tracking_API.Controllers
             {
                 var telemetry = new TelemetryClient();
                 telemetry.TrackException(ex);
-                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, "BusStop failed");
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, "BusStop(id) failed");
             }
         }
 
@@ -148,58 +148,67 @@ namespace Tracking_API.Controllers
         [Route("api/Values/BusStop/{code}")]
         public HttpResponseMessage BusStop(string code)
         {
-
-            MemoryCache mc = MemoryCache.Default;
-            var departures = mc[StopCodeInformationkey(code)] as List<BusETA>;
-            if (departures == null)
+            try
             {
-                IDatabase redisCache = RedisConnection.GetDatabase();
-                departures = new List<BusETA>();
 
-                List<int> stops;
-                var listOfStopsForCodeFromRedisCache = redisCache.StringGet(DepaturesStopsForCode(code));
-                if (listOfStopsForCodeFromRedisCache != RedisValue.Null)
+                MemoryCache mc = MemoryCache.Default;
+                var departures = mc[StopCodeInformationkey(code)] as List<BusETA>;
+                if (departures == null)
                 {
-                    stops = JsonConvert.DeserializeObject<List<int>>(listOfStopsForCodeFromRedisCache);
-                }
-                else
-                {
-                    stops = getStopsForDepartureCode(code);
-                    redisCache.StringSet(DepaturesStopsForCode(code), JsonConvert.SerializeObject(stops), TimeSpan.FromHours(DEPARTURES_STOP_CODE_CACHE_HOURS));
-                }
+                    IDatabase redisCache = RedisConnection.GetDatabase();
+                    departures = new List<BusETA>();
 
-                foreach (int stop in stops)
-                {
-                    var StopSpecificDepartures = new List<BusETA>();
-                    var listOfDeparturesFromRedisCache = redisCache.StringGet(DeparturesStopInformationkey(stop));
-                    if (listOfDeparturesFromRedisCache != RedisValue.Null)
+                    List<int> stops;
+                    var listOfStopsForCodeFromRedisCache = redisCache.StringGet(DepaturesStopsForCode(code));
+                    if (listOfStopsForCodeFromRedisCache != RedisValue.Null)
                     {
-                        StopSpecificDepartures = JsonConvert.DeserializeObject<List<BusETA>>(listOfDeparturesFromRedisCache);
+                        stops = JsonConvert.DeserializeObject<List<int>>(listOfStopsForCodeFromRedisCache);
                     }
                     else
                     {
-                        WebClient wc = new WebClient();
-                        byte[] raw = wc.DownloadData("http://jersey.connect.vixtechnology.com/Text/WebDisplay.aspx?stopRef=" + stop.ToString());
-
-                        string webData = System.Text.Encoding.UTF8.GetString(raw);
-
-                        StopSpecificDepartures = BusETA.ConvertVixXhtmlToBusETAs(webData, DateTime.Now, stop);
-
-                        TimeSpan timeToNextDepartureOrFiveMinutesIfNone = StopSpecificDepartures.Count > 0 && StopSpecificDepartures.First().ETA > DateTime.Now ?
-                                                                            StopSpecificDepartures.First().ETA - DateTime.Now 
-                                                                            :
-                                                                            TimeSpan.FromMinutes(5);
-                        redisCache.StringSet(DeparturesStopInformationkey(stop),
-                                            JsonConvert.SerializeObject(StopSpecificDepartures),
-                                            expiry: timeToNextDepartureOrFiveMinutesIfNone
-                                            );
+                        stops = getStopsForDepartureCode(code);
+                        redisCache.StringSet(DepaturesStopsForCode(code), JsonConvert.SerializeObject(stops), TimeSpan.FromHours(DEPARTURES_STOP_CODE_CACHE_HOURS));
                     }
-                    departures.AddRange(StopSpecificDepartures);
-                }
-                mc.Add(StopCodeInformationkey(code), departures, DateTimeOffset.UtcNow.AddSeconds(STOP_ETA_CACHE_TIMESPAN_SECONDS));
-            }
 
-            return Request.CreateResponse(HttpStatusCode.OK, departures);
+                    foreach (int stop in stops)
+                    {
+                        var StopSpecificDepartures = new List<BusETA>();
+                        var listOfDeparturesFromRedisCache = redisCache.StringGet(DeparturesStopInformationkey(stop));
+                        if (listOfDeparturesFromRedisCache != RedisValue.Null)
+                        {
+                            StopSpecificDepartures = JsonConvert.DeserializeObject<List<BusETA>>(listOfDeparturesFromRedisCache);
+                        }
+                        else
+                        {
+                            WebClient wc = new WebClient();
+                            byte[] raw = wc.DownloadData("http://jersey.connect.vixtechnology.com/Text/WebDisplay.aspx?stopRef=" + stop.ToString());
+
+                            string webData = System.Text.Encoding.UTF8.GetString(raw);
+
+                            StopSpecificDepartures = BusETA.ConvertVixXhtmlToBusETAs(webData, DateTime.Now, stop);
+
+                            TimeSpan timeToNextDepartureOrFiveMinutesIfNone = StopSpecificDepartures.Count > 0 && StopSpecificDepartures.First().ETA > DateTime.Now ?
+                                                                                StopSpecificDepartures.First().ETA - DateTime.Now
+                                                                                :
+                                                                                TimeSpan.FromMinutes(5);
+                            redisCache.StringSet(DeparturesStopInformationkey(stop),
+                                                JsonConvert.SerializeObject(StopSpecificDepartures),
+                                                expiry: timeToNextDepartureOrFiveMinutesIfNone
+                                                );
+                        }
+                        departures.AddRange(StopSpecificDepartures);
+                    }
+                    mc.Add(StopCodeInformationkey(code), departures, DateTimeOffset.UtcNow.AddSeconds(STOP_ETA_CACHE_TIMESPAN_SECONDS));
+                }
+
+                return Request.CreateResponse(HttpStatusCode.OK, departures);
+            }
+            catch (Exception ex)
+            {
+                var telemetry = new TelemetryClient();
+                telemetry.TrackException(ex);
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, "BusStop(code) failed");
+            }
         }
 
 
