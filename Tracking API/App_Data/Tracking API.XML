@@ -523,6 +523,13 @@
             <param name="id">The bus stop ID (as painted on the road for the TextMyBus service)</param>
             <returns>Information on estimated time of arrival for various buses at a given stop</returns>
         </member>
+        <member name="M:Tracking_API.Controllers.ValuesController.BusStop(System.String)">
+            <summary>
+            Get information on departures for a given location
+            </summary>
+            <param name="code">The departure code, LIBERATIONSTATION or AIRPORT</param>
+            <returns>Information on scheduled departures</returns>
+        </member>
         <member name="M:Tracking_API.Controllers.ValuesController.Get(System.Nullable{System.Int32},System.Nullable{System.Decimal},System.Nullable{System.Decimal},System.Nullable{System.Int32},System.Nullable{System.Int32})">
             <summary>
             Get bus locations and bus stops (if lat and lon provided) within x metres of the provided location

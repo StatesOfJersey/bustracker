@@ -40,6 +40,8 @@ namespace Tracking_API.Controllers
         private const int ROUTE_CACHE_TIMESPAN_SECONDS = 43200;
         private const int STOP_CACHE_TIMESPAN_SECONDS = 43200; //43200s = 12 hour cache since bus stops do not change that often
         private const int STOP_ETA_CACHE_TIMESPAN_SECONDS = 5; //we don't want to cache this very much at all but we do want to prevent a denial of service attack on the underlying data source
+        private const int DEPARTURES_CACHE_TIMESPAN_SECONDS = 1200; //1200 = 20 minutes
+        private const int DEPARTURES_STOP_CODE_CACHE_HOURS = 24; //this is the time we hold on to the DB lookup of codes to stops, for example all the stops for LIBERATIONSTATION
 
         #region v1 feed provided for stability for app developers to rely on an exact feed version
         /// <summary>
@@ -109,7 +111,6 @@ namespace Tracking_API.Controllers
         [Route("api/Values/BusStop/{id:int}")]
         public HttpResponseMessage BusStop(int id)
         {
-
             MemoryCache mc = MemoryCache.Default;
             var busETAs = mc[StopInformationkey(id)] as List<BusETA>;
             if (busETAs == null)
@@ -118,9 +119,7 @@ namespace Tracking_API.Controllers
                 byte[] raw = wc.DownloadData("http://jersey.connect.vixtechnology.com/Text/WebDisplay.aspx?stopRef=" + id.ToString());
 
                 string webData = System.Text.Encoding.UTF8.GetString(raw);
-
-                // var gmtZone = TimeZoneInfo.FindSystemTimeZoneById("GMT Standard Time");
-                // var gmtDateTime = TimeZoneInfo.ConvertTime(DateTime.Now, TimeZoneInfo.Local, gmtZone).AddHours(-1);
+                
                 busETAs = BusETA.ConvertVixXhtmlToBusETAs(webData, DateTime.Now, id);
 
                 mc.Add(StopInformationkey(id), busETAs, DateTimeOffset.UtcNow.AddSeconds(STOP_ETA_CACHE_TIMESPAN_SECONDS));
@@ -128,6 +127,71 @@ namespace Tracking_API.Controllers
 
             return Request.CreateResponse(HttpStatusCode.OK, busETAs);
         }
+
+
+        /// <summary>
+        /// Get information on departures for a given location
+        /// </summary>
+        /// <param name="code">The departure code, LIBERATIONSTATION or AIRPORT</param>
+        /// <returns>Information on scheduled departures</returns>
+        [HttpGet]
+        [Route("api/Values/BusStop/{code}")]
+        public HttpResponseMessage BusStop(string code)
+        {
+
+            MemoryCache mc = MemoryCache.Default;
+            var departures = mc[StopCodeInformationkey(code)] as List<BusETA>;
+            if (departures == null)
+            {
+                IDatabase redisCache = RedisConnection.GetDatabase();
+                departures = new List<BusETA>();
+
+                List<int> stops;
+                var listOfStopsForCodeFromRedisCache = redisCache.StringGet(DepaturesStopsForCode(code));
+                if (listOfStopsForCodeFromRedisCache != RedisValue.Null)
+                {
+                    stops = JsonConvert.DeserializeObject<List<int>>(listOfStopsForCodeFromRedisCache);
+                }
+                else
+                {
+                    stops = getStopsForDepartureCode(code);
+                    redisCache.StringSet(DepaturesStopsForCode(code), JsonConvert.SerializeObject(stops), TimeSpan.FromHours(DEPARTURES_STOP_CODE_CACHE_HOURS));
+                }
+
+                foreach (int stop in stops)
+                {
+                    var StopSpecificDepartures = new List<BusETA>();
+                    var listOfDeparturesFromRedisCache = redisCache.StringGet(DeparturesStopInformationkey(stop));
+                    if (listOfDeparturesFromRedisCache != RedisValue.Null)
+                    {
+                        StopSpecificDepartures = JsonConvert.DeserializeObject<List<BusETA>>(listOfDeparturesFromRedisCache);
+                    }
+                    else
+                    {
+                        WebClient wc = new WebClient();
+                        byte[] raw = wc.DownloadData("http://jersey.connect.vixtechnology.com/Text/WebDisplay.aspx?stopRef=" + stop.ToString());
+
+                        string webData = System.Text.Encoding.UTF8.GetString(raw);
+
+                        StopSpecificDepartures = BusETA.ConvertVixXhtmlToBusETAs(webData, DateTime.Now, stop);
+
+                        TimeSpan timeToNextDepartureOrFiveMinutesIfNone = StopSpecificDepartures.Count > 0 && StopSpecificDepartures.First().ETA > DateTime.Now ?
+                                                                            StopSpecificDepartures.First().ETA - DateTime.Now 
+                                                                            :
+                                                                            TimeSpan.FromMinutes(5);
+                        redisCache.StringSet(DeparturesStopInformationkey(stop),
+                                            JsonConvert.SerializeObject(StopSpecificDepartures),
+                                            expiry: timeToNextDepartureOrFiveMinutesIfNone
+                                            );
+                    }
+                    departures.AddRange(StopSpecificDepartures);
+                }
+                mc.Add(StopCodeInformationkey(code), departures, DateTimeOffset.UtcNow.AddSeconds(STOP_ETA_CACHE_TIMESPAN_SECONDS));
+            }
+
+            return Request.CreateResponse(HttpStatusCode.OK, departures);
+        }
+
 
         /// <summary>
         /// Get bus locations and bus stops (if lat and lon provided) within x metres of the provided location
@@ -276,6 +340,23 @@ namespace Tracking_API.Controllers
 
             return results;
         }
+        private List<int> getStopsForDepartureCode(string code)
+        {
+            List<int> stopIds = new List<int>();
+            using (var connection = new SqlConnection(CloudConfigurationManager.GetSetting("SQLAzure.ConnectionString")))
+            {
+                var command = new SqlCommand("[getStopsForDepartureCode]", connection) { CommandType = CommandType.StoredProcedure };
+                command.Parameters.Add("@groupName", SqlDbType.NVarChar, 50).Value = code;
+                connection.Open();
+                var rs = command.ExecuteReader();
+                while (rs.Read())
+                {
+                    stopIds.Add((int)rs["stopid"]);
+                }
+                connection.Close();
+            }
+            return stopIds;
+        }
 
         private List<BusRoute> getRoutesFromSqlAzure()
         {
@@ -377,6 +458,18 @@ namespace Tracking_API.Controllers
         private string StopInformationkey(int id)
         {
             return string.Format("stopNumber-{0}", id);
+        }
+        private string StopCodeInformationkey(string code)
+        {
+            return string.Format("stopCode-{0}", code);
+        }
+        private string DepaturesStopsForCode(string code)
+        {
+            return string.Format("departures:code:{0}", code);
+        }
+        private string DeparturesStopInformationkey(int stop)
+        {
+            return string.Format("departures:stop:{0}", stop);
         }
         private string LastUpdatekey()
         {

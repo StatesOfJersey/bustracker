@@ -1,7 +1,7 @@
 begin
 
 	declare @groupId int
-	insert into stopGroups (groupName) values ('LIBERTYSTATION')
+	insert into stopGroups (groupName) values ('LIBERATIONSTATION')
 	select @groupId = SCOPE_IDENTITY()
 	
 	insert into stopGroupStops (stopGroupId, stopId) 
