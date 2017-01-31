@@ -60,23 +60,10 @@ namespace Tracking_Receiver.Controllers
                 {
                     //do nothing it's a heartbeat from Siri
                 }
-                else if (xmlFromSiri.IndexOf("StopMonitoringDelivery") > 0)
-                {
-                    //chuck the data in redis cache for now
-                    IDatabase cache = RedisConnection.GetDatabase();
-                    cache.StringSet("stopdata:xyz", xmlDocument.ToString());
-                }
-                else if (xmlFromSiri.IndexOf("VehicleMonitoringDelivery") > 0)
+                else
                 {
                     //Bus location update so convert it to an AssetLocationUpdate and send on
-
-                    IDatabase tempcache = RedisConnection.GetDatabase();
-                    tempcache.StringSet("rawbusdata:xyz", xmlDocument.ToString());
-
-                    bool messageBusEnabled = bool.Parse(CloudConfigurationManager.GetSetting("MessageBus.Enabled"));
-                    TopicClient senderTopicClient = null;
-                    if (messageBusEnabled)
-                        senderTopicClient = TopicClient.CreateFromConnectionString(CloudConfigurationManager.GetSetting("MessageBus.ConnectionString"), CloudConfigurationManager.GetSetting("MessageBus.Topic"));
+                    var senderTopicClient = TopicClient.CreateFromConnectionString(CloudConfigurationManager.GetSetting("MessageBus.ConnectionString"), CloudConfigurationManager.GetSetting("MessageBus.Topic"));
 
                     List<AssetLocationUpdate> assetLocationUpdates = comms.ConvertToSiriMessageToAssetLocationUpdates(xmlDocument, int.Parse(CloudConfigurationManager.GetSetting("CutOffForSchoolBusNumbers")), CloudConfigurationManager.GetSetting("Ticketer.SubscriptionIdentifier"));
                     foreach (var update in assetLocationUpdates)
@@ -101,16 +88,15 @@ namespace Tracking_Receiver.Controllers
                         try
                         {
                             var busData = JsonConvert.SerializeObject(eventData);
-                            if (senderTopicClient != null)
-                                senderTopicClient.Send(new BrokeredMessage(busData));
+
+                            senderTopicClient.Send(new BrokeredMessage(busData));
                         }
                         catch (Exception ex)
                         { //no nothing
                         }
 
                     }
-                    if (senderTopicClient != null)
-                        senderTopicClient.Close();
+                    senderTopicClient.Close();
 
 
                     try
@@ -127,12 +113,6 @@ namespace Tracking_Receiver.Controllers
                         //do nothing
                     }
                 }
-                else
-                {
-                    //chuck the data in redis cache for now
-                    IDatabase cache = RedisConnection.GetDatabase();
-                    cache.StringSet("unknown:xyz", xmlDocument.ToString());
-                }
             }
             CheckAndSubscribeToSiriIfNecessary();
             return new HttpResponseMessage(HttpStatusCode.OK);
@@ -144,7 +124,7 @@ namespace Tracking_Receiver.Controllers
             {
                 using (Communication comms = new Communication())
                 {
-                    var result = comms.SubscribeToVehicleMonitoringService(
+                    var result = comms.SubscribeToService(
                         CloudConfigurationManager.GetSetting("Ticketer.RequestorRef"),
                         CloudConfigurationManager.GetSetting("Ticketer.ReplyAddress"),
                         CloudConfigurationManager.GetSetting("Ticketer.SubscriptionIdentifier"),
@@ -152,33 +132,11 @@ namespace Tracking_Receiver.Controllers
                         CloudConfigurationManager.GetSetting("Ticketer.Url"),
                         CloudConfigurationManager.GetSetting("Ticketer.Login"),
                         CloudConfigurationManager.GetSetting("Ticketer.Password"));
-                    if (result.Item1)
+                    if (result.Item1)//success
                     {
                         sendSubscriptionInformationToSqlAzure(result);
                         SiriSubscriptionDate = DateTime.UtcNow;
                     }
-                  
-
-                    result = comms.SubscribeToStopMonitoringService(
-                        CloudConfigurationManager.GetSetting("Ticketer.RequestorRef"),
-                        CloudConfigurationManager.GetSetting("Ticketer.ReplyAddress"),
-                        CloudConfigurationManager.GetSetting("Ticketer.SubscriptionIdentifier"),
-                        CloudConfigurationManager.GetSetting("Ticketer.UpdateInterval"),
-                        CloudConfigurationManager.GetSetting("Ticketer.Url"),
-                        CloudConfigurationManager.GetSetting("Ticketer.Login"),
-                        CloudConfigurationManager.GetSetting("Ticketer.Password"),
-                        4524); //Stand B
-                    if (result.Item1)
-                    {
-                        sendSubscriptionInformationToSqlAzure(result);
-                    }
-                    else
-                    {
-
-                        IDatabase cache = RedisConnection.GetDatabase();
-                        cache.StringSet("error:theError", result.Item2.ToString());
-                    }
-
                 }
             }
         }

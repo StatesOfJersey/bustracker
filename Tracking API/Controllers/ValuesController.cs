@@ -17,6 +17,7 @@ using System.Xml.Linq;
 using System.Xml.XPath;
 using Newtonsoft.Json;
 using Tracking_Common;
+using Microsoft.ApplicationInsights;
 
 namespace Tracking_API.Controllers
 {
@@ -111,21 +112,30 @@ namespace Tracking_API.Controllers
         [Route("api/Values/BusStop/{id:int}")]
         public HttpResponseMessage BusStop(int id)
         {
-            MemoryCache mc = MemoryCache.Default;
-            var busETAs = mc[StopInformationkey(id)] as List<BusETA>;
-            if (busETAs == null)
+            try
             {
-                WebClient wc = new WebClient();
-                byte[] raw = wc.DownloadData("http://jersey.connect.vixtechnology.com/Text/WebDisplay.aspx?stopRef=" + id.ToString());
+                MemoryCache mc = MemoryCache.Default;
+                var busETAs = mc[StopInformationkey(id)] as List<BusETA>;
+                if (busETAs == null)
+                {
+                    WebClient wc = new WebClient();
+                    byte[] raw = wc.DownloadData("http://jersey.connect.vixtechnology.com/Text/WebDisplay.aspx?stopRef=" + id.ToString());
 
-                string webData = System.Text.Encoding.UTF8.GetString(raw);
+                    string webData = System.Text.Encoding.UTF8.GetString(raw);
                 
-                busETAs = BusETA.ConvertVixXhtmlToBusETAs(webData, DateTime.Now, id);
+                    busETAs = BusETA.ConvertVixXhtmlToBusETAs(webData, DateTime.Now, id);
 
-                mc.Add(StopInformationkey(id), busETAs, DateTimeOffset.UtcNow.AddSeconds(STOP_ETA_CACHE_TIMESPAN_SECONDS));
+                    mc.Add(StopInformationkey(id), busETAs, DateTimeOffset.UtcNow.AddSeconds(STOP_ETA_CACHE_TIMESPAN_SECONDS));
+                }
+
+                return Request.CreateResponse(HttpStatusCode.OK, busETAs);
             }
-
-            return Request.CreateResponse(HttpStatusCode.OK, busETAs);
+            catch (Exception ex)
+            {
+                var telemetry = new TelemetryClient();
+                telemetry.TrackException(ex);
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, "BusStop failed");
+            }
         }
 
 
@@ -206,16 +216,25 @@ namespace Tracking_API.Controllers
         [Route("api/Values/{secondsAgo:int?}/{lat:decimal?}/{lon:decimal?}/{stopsWithinXMetres:int?}/{limitTo:int?}")]
         public HttpResponseMessage Get(int? secondsAgo = null, decimal? lat = null, decimal? lon = null, int? stopsWithinXMetres = 500, int? limitTo = 10)
         {
-            List<AssetLocationUpdate> updates = GetUpdates(secondsAgo);
+            try
+            {
+                List<AssetLocationUpdate> updates = GetUpdates(secondsAgo);
 
-            List<BusStop> stops = GetStops(lat, lon, stopsWithinXMetres, limitTo);
+                List<BusStop> stops = GetStops(lat, lon, stopsWithinXMetres, limitTo);
 
-            return Request.CreateResponse(HttpStatusCode.OK,
-                new
-                {
-                    updates,
-                    stops
-                });
+                return Request.CreateResponse(HttpStatusCode.OK,
+                    new
+                    {
+                        updates,
+                        stops
+                    });
+            }
+            catch (Exception ex)
+            {
+                var telemetry = new TelemetryClient();
+                telemetry.TrackException(ex);
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, "Get failed");
+            }
         }
 
         /// <summary>
@@ -231,17 +250,26 @@ namespace Tracking_API.Controllers
         [Route("api/Values/GetMin/{secondsAgo:int?}/{lat:decimal?}/{lon:decimal?}/{stopsWithinXMetres:int?}/{limitTo:int?}")]
         public HttpResponseMessage GetMin(int? secondsAgo = null, decimal? lat = null, decimal? lon = null, int? stopsWithinXMetres = 500, int? limitTo = 10)
         {
-            List<AssetLocationUpdate> updates = GetUpdates(secondsAgo);
+            try
+            {
+                List<AssetLocationUpdate> updates = GetUpdates(secondsAgo);
 
-            List<mALU> minimumInfoUpdates = updates.ConvertAll(x => new mALU(x));
-            List<BusStop> stops = GetStops(lat, lon, stopsWithinXMetres, limitTo);
+                List<mALU> minimumInfoUpdates = updates.ConvertAll(x => new mALU(x));
+                List<BusStop> stops = GetStops(lat, lon, stopsWithinXMetres, limitTo);
 
-            return Request.CreateResponse(HttpStatusCode.OK,
-                new
-                {
-                    minimumInfoUpdates,
-                    stops
-                });
+                return Request.CreateResponse(HttpStatusCode.OK,
+                    new
+                    {
+                        minimumInfoUpdates,
+                        stops
+                    });
+            }
+            catch (Exception ex)
+            {
+                var telemetry = new TelemetryClient();
+                telemetry.TrackException(ex);
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, "GetMin failed");
+            }
         }
 
         /// <summary>
@@ -252,13 +280,23 @@ namespace Tracking_API.Controllers
         [Route("api/Values/GetRoutes")]
         public HttpResponseMessage GetRoutes()
         {
-            var routes = GetRoutesOrCache();
+            try
+            {
+                var routes = GetRoutesOrCache();
 
-            return Request.CreateResponse(HttpStatusCode.OK,
-                new
-                {
-                    routes
-                });
+                return Request.CreateResponse(HttpStatusCode.OK,
+                    new
+                    {
+                        routes
+                    });
+            }
+            catch (Exception ex)
+            {
+                var telemetry = new TelemetryClient();
+                telemetry.TrackException(ex);
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, "GetRoutes failed");
+            }
+
         }
 
 

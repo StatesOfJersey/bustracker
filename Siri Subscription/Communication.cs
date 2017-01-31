@@ -187,16 +187,18 @@ string.Format(@"<Siri xmlns=""http://www.siri.org.uk/siri"" xmlns:xsi=""http://w
                 result = reader.ReadToEnd();
                 reader.Close();
             }
-            xmlResult = XDocument.Parse(result);
-            xmlResult.StripSiriNamespace();
+            
             bool success = false;
             try
             {
+                xmlResult = XDocument.Parse(result);
+                xmlResult.StripSiriNamespace();
                 success = bool.Parse(xmlResult.XPathSelectElement("//ResponseStatus/Status").Value);
             }
             catch
             {
                 //ignore we are going to just report no success
+                xmlResult = XDocument.Parse("<xmlResponse><![CDATA[ could not parse the following : '" + result + "']]></xmlResponse>");
             }
 
             return new Tuple<bool, XDocument>(
