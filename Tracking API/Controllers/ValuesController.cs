@@ -150,7 +150,7 @@ namespace Tracking_API.Controllers
         {
             try
             {
-
+                code = code.ToUpper();
                 MemoryCache mc = MemoryCache.Default;
                 var departures = mc[StopCodeInformationkey(code)] as List<BusETA>;
                 if (departures == null)
@@ -190,7 +190,7 @@ namespace Tracking_API.Controllers
                             TimeSpan timeToNextDepartureOrFiveMinutesIfNone = StopSpecificDepartures.Count > 0 && StopSpecificDepartures.First().ETA > DateTime.Now ?
                                                                                 StopSpecificDepartures.First().ETA - DateTime.Now
                                                                                 :
-                                                                                TimeSpan.FromMinutes(5);
+                                                                                TimeSpan.FromMinutes(60);
                             redisCache.StringSet(DeparturesStopInformationkey(stop),
                                                 JsonConvert.SerializeObject(StopSpecificDepartures),
                                                 expiry: timeToNextDepartureOrFiveMinutesIfNone
@@ -200,8 +200,10 @@ namespace Tracking_API.Controllers
                     }
                     mc.Add(StopCodeInformationkey(code), departures, DateTimeOffset.UtcNow.AddSeconds(STOP_ETA_CACHE_TIMESPAN_SECONDS));
                 }
-
-                return Request.CreateResponse(HttpStatusCode.OK, departures);
+                //departures which havent already left and also depart within the next 3 hours
+                return Request.CreateResponse(HttpStatusCode.OK, departures.Where(t => t.ETA >= DateTime.Now.AddMinutes(-1) &&
+                                                                                        t.ETA <= DateTime.Now.AddHours(3))
+                                                                           .OrderBy(t => t.ETA).ToList());
             }
             catch (Exception ex)
             {
