@@ -39,17 +39,98 @@ function drawBus(busData, duration) {
             .on('click', busClicked);
 
 
+
+
         // Enter circle
         pointsEnter
-            .append('path').attr({ d: busShape })
-            .attr("transform", (function (d) {
-                return convertBusPositionAndBearing(d);
-            }))
-            .style("stroke", d3.rgb(59, 63, 65))
-            .style("stroke-width", "1")
-            .style("fill", (function (d) {
-                return getBusColourHex(d["line"], routes);
-            }));
+             .append('path').attr({ d: busShape })
+             .attr("transform", (function (d) {
+                 return convertBusPositionAndBearing(d);
+             }))
+             .style("visibility", "hidden");
+
+
+
+        /////////////
+        //   XMAS Logic
+
+        var today = new Date();
+        var dd = today.getDate();
+        var mm = today.getMonth() + 1; //January is 0!
+
+        var thisYear = today.getFullYear();
+        if (dd < 10) {
+            dd = '0' + dd
+        }
+        if (mm < 10) {
+            mm = '0' + mm
+        }
+        var dateCheck = dd + '/' + mm + '/' + thisYear;
+
+        var dateFrom = "14/12/" + thisYear;
+        var dateTo = "27/12/" + thisYear;
+
+        var d1 = dateFrom.split("/");
+        var d2 = dateTo.split("/");
+        var c = dateCheck.split("/");
+
+        var from = new Date(d1[2], parseInt(d1[1]) - 1, d1[0]);  // -1 because months are from 0 to 11
+        var to = new Date(d2[2], parseInt(d2[1]) - 1, d2[0]);
+        var check = new Date(c[2], parseInt(c[1]) - 1, c[0]);
+
+
+        if (check > from && check < to) {
+
+            ////XMAS
+            var xmas1 = 'M67.5,31.5c-3.3-5.8-11-11-18.5-11c-10.8,0-19.5,8.8-19.5,19l36,1c-2-1-2-7-2-7c0-3,2,1,2,1L67.5,31.5z'
+            var xmas2 = 'M62.4,48.5c-8.1-6-21.7-6-29.8,0c-2,1.3-4.5,1-5.6-1.1c0-0.1,0-0.1-0.1-0.1c-1.2-2.1-0.2-5.5,2.2-7.1c11.2-7.5,25.6-7.5,36.8,0c2.5,1.6,3.4,5,2.2,7.1c0,0.1,0,0.1-0.1,0.1C66.9,49.5,64.4,49.8,62.4,48.5z'
+            var xmas3 = 'M69.1,39c-2.812,0-5.1-2.288-5.1-5.1s2.288-5.1,5.1-5.1c2.812,0,5.101,2.288,5.101,5.1S71.912,39,69.1,39z M69.1,29.8c-2.261,0-4.1,1.839-4.1,4.1c0,2.261,1.839,4.1,4.1,4.1s4.101-1.839,4.101-4.1C73.2,31.639,71.36,29.8,69.1,29.8z'
+
+            pointsEnter
+                .append('path').attr({ d: xmas1 })
+                .attr("transform", (function (d) {
+                    return xmasPosition(d);
+                }))
+                .style("stroke", d3.rgb(59, 63, 65))
+                .style("stroke-width", "1")
+                .style("fill", "red");
+
+            pointsEnter
+                .append('path').attr({ d: xmas2 })
+                .attr("transform", (function (d) {
+                    return xmasPosition(d);
+                }))
+                .style("stroke", d3.rgb(59, 63, 65))
+                .style("stroke-width", "1")
+                 .style("fill", "white");
+
+            pointsEnter
+                .append('path').attr({ d: xmas3 })
+                .attr("transform", (function (d) {
+                    return xmasPosition(d);
+                }))
+                .style("stroke", d3.rgb(59, 63, 65))
+                .style("stroke-width", "1")
+                 .style("fill", "white");
+
+            function xmasPosition(d) {
+                return "translate(-23,-29) scale(0.50) rotate(0, 11, 15)"
+            }
+        }
+
+        pointsEnter
+           .append('path').attr({ d: busShape })
+           .attr("transform", (function (d) {
+               return convertBusPositionAndBearing(d);
+           }))
+           .style("stroke", d3.rgb(59, 63, 65))
+           .style("stroke-width", "1")
+           .style("fill", (function (d) {
+               return getBusColourHex(d["line"], routes);
+           }));
+
+
+
 
 
         // Enter text
@@ -144,7 +225,7 @@ function drawRoutes(routedata) {
         return;
     }
 
-    var mode = (map.getZoom() > 14)? "linear" : "basis";
+    var mode = (map.getZoom() > 14) ? "linear" : "basis";
 
 
     var lineFunction = d3.svg.line()
@@ -179,7 +260,7 @@ function drawRoutes(routedata) {
                     sectionBoundaries.push(j);
                 }
             }
-            
+
             for (var k = 0; k < sectionBoundaries.length; k++) {
                 var firstPointOfSection = route["RouteCoordinates"][sectionBoundaries[k]];
                 lineStyle = (firstPointOfSection["direction"] == "I") ? "5, 5" : "none"; // I=Inbound
@@ -191,7 +272,7 @@ function drawRoutes(routedata) {
                       .attr("stroke", routeColour)
                       .attr("stroke-width", 2)
                       .attr("fill", "none")
-                      .attr("stroke-dasharray", lineStyle);              
+                      .attr("stroke-dasharray", lineStyle);
                 } else if (k == sectionBoundaries.length - 1) { //last one in the array so from here to the end
                     var lineGraph = svg.append("path")
                       .attr("d", lineFunction(route["RouteCoordinates"].slice(sectionBoundaries[k], route["RouteCoordinates"].length)))
@@ -202,7 +283,7 @@ function drawRoutes(routedata) {
                       .attr("stroke-dasharray", lineStyle);
                 } else { // a mid route section
                     var lineGraph = svg.append("path")
-                     .attr("d", lineFunction(route["RouteCoordinates"].slice(sectionBoundaries[k], sectionBoundaries[k+1])))
+                     .attr("d", lineFunction(route["RouteCoordinates"].slice(sectionBoundaries[k], sectionBoundaries[k + 1])))
                      .attr('class', 'route')
                      .attr("stroke", routeColour)
                      .attr("stroke-width", 2)
@@ -404,7 +485,7 @@ function stopClicked(d) {
             .attr("class", "loadingMessage")
             .text("Loading...");
         //https://sojbuslivetimespublic.azurewebsites.net/api/Values/BusStop/
-        d3.json("https://uat-sojbuslivetimespublic.azurewebsites.net//api/Values/BusStop/" + d["StopNumber"], function (data) {
+        d3.json("https://sojbuslivetimespublic.azurewebsites.net//api/Values/BusStop/" + d["StopNumber"], function (data) {
             drawEtaTable(popup, data);
             d3.select(".loadingMessage").remove();
         });
