@@ -124,7 +124,7 @@ function drawBus(busData, duration) {
                return convertBusPositionAndBearing(d);
            }))
            .style("stroke", d3.rgb(59, 63, 65))
-           .style("stroke-width", "1")
+           .style("stroke-width", "1.5")
            .style("fill", (function (d) {
                return getBusColourHex(d["line"], routes);
            }));
@@ -199,14 +199,14 @@ function drawStop(stopData) {
         .on('click', stopClicked);
 
     stopsEnter.append('rect')
-       .attr("width", "1px")
+       .attr("width", "2px")
        .attr("height", "20px")
        .attr("x", "0")
        .attr("y", "-20")
        .style('fill', d3.rgb(136, 136, 136));
 
     stopsEnter.append('circle')
-        .attr("r", "8")
+        .attr("r", "12")
         .attr("cx", "1")
         .attr("cy", "-20")
         .style("stroke", "black")
