@@ -198,6 +198,15 @@ function drawStop(stopData) {
         }))
         .on('click', stopClicked);
 
+    var mapZoom = map.getZoom();
+    var stopRadius = 8;
+    if (mapZoom > 12)
+        stopRadius = 12;
+    if (mapZoom > 14)
+        stopRadius = 16;
+
+    console.log("zoom", mapZoom, "radius", stopRadius);
+
     stopsEnter.append('rect')
        .attr("width", "2px")
        .attr("height", "20px")
@@ -206,12 +215,23 @@ function drawStop(stopData) {
        .style('fill', d3.rgb(136, 136, 136));
 
     stopsEnter.append('circle')
-        .attr("r", "10")
+        .attr("r", stopRadius)
         .attr("cx", "1")
         .attr("cy", "-20")
         .style("stroke", "black")
         .style("stroke-width", "1")
         .style("fill", d3.rgb(227, 44, 25));
+
+    /* //this generates a halo around the stops
+    stopsEnter.append("circle")
+        .attr("r", stopRadius + 10)
+        .attr("cx", "1")
+        .attr("cy", "-20")
+        .style("stroke", "black")
+        .style("stroke-width", "1")
+        .style("opacity", .01)
+        .style("fill", d3.rgb(227, 44, 25));
+        */
 
     var stopsExit = stops.exit().remove();
 }

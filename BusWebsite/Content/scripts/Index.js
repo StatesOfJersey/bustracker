@@ -41,7 +41,7 @@ function init() {
         zoomControl: false, // Show on right
         layer: tiles
     }).addLayer(tiles);
-    L.control.scale().addTo(map);
+    L.control.scale({ imperial: false }).addTo(map);
     L.control.zoom({ position: 'topright' }).addTo(map);
     map.fitBounds(bounds);
     map.setZoom(12);
