@@ -19,7 +19,7 @@ namespace Tracking_Common
 
         public static List<BusETA> ConvertVixXhtmlToBusETAs(string vixXhtml, DateTime referenceTime, int StopNumber)
         {
-            if (vixXhtml.Contains("No departures found"))
+            if (vixXhtml.Contains("No departures found") || !vixXhtml.Contains("Service Name"))
             {
                 return new List<BusETA>();
             }
