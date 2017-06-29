@@ -16,6 +16,7 @@ using System.Xml;
 using System.Xml.Linq;
 using Tracking_Common;
 using StackExchange.Redis;
+using Microsoft.Azure;
 
 namespace Tracking_Receiver.Controllers
 {

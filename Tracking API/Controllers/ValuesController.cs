@@ -18,6 +18,7 @@ using System.Xml.XPath;
 using Newtonsoft.Json;
 using Tracking_Common;
 using Microsoft.ApplicationInsights;
+using Microsoft.Azure;
 
 namespace Tracking_API.Controllers
 {
