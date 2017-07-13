@@ -201,9 +201,9 @@ namespace Tracking_API.Controllers
                     }
                     mc.Add(StopCodeInformationkey(code), departures, DateTimeOffset.UtcNow.AddSeconds(STOP_ETA_CACHE_TIMESPAN_SECONDS));
                 }
-                //departures which havent already left and also depart within the next 3 hours
+                //departures which havent already left and also depart within the next hour
                 return Request.CreateResponse(HttpStatusCode.OK, departures.Where(t => t.ETA >= DateTime.Now.AddMinutes(-1) &&
-                                                                                        t.ETA <= DateTime.Now.AddHours(3))
+                                                                                        t.ETA <= DateTime.Now.AddHours(1))
                                                                            .OrderBy(t => t.ETA).ToList());
             }
             catch (Exception ex)
